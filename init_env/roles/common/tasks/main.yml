@@ -1,0 +1,8 @@
+- name: "Ensure User: {{ normal_user}}"
+  user: name={{ normal_user }} password={{ normal_user_pass | password_hash('sha512') }}
+
+- include: tasks/{{ ansible_os_family | lower }}/{{ item }}.yml
+  with_items:
+    - add_sudoers
+    - ensure_epel
+    - ensure_pip

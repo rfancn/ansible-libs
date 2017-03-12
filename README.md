@@ -5,8 +5,12 @@ Each sub directory is an ansible playbook for specific purpose, you can download
 ## INSTRUCATIONS
 
     # pip install ansible
-    # cd <playbook_name>
-    # ansible-playbook -vvi hosts site.yml
+    $ cd <playbook_name>
+    - Edit hosts file according to ansible document, e,g:
+    <hostnameA>:<host portA> ansible_user=root ansible_ssh_password=
+    <hostnameB>:<host portB> ansible_user=oracle ansible_ssh_password=
+    ...    
+    $ ansible-playbook -vvi hosts site.yml
 
 ## init_env
 Initialize a minimal Linux env for development or production ready env

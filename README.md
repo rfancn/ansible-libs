@@ -2,7 +2,7 @@
 
 Each sub directory is an ansible playbook for specific purpose, you can download it and run with ansible.
 
-## INSTRUCATIONS
+## Instructions
 
     # pip install ansible
     $ cd <playbook_name>
@@ -12,7 +12,8 @@ Each sub directory is an ansible playbook for specific purpose, you can download
     ...    
     $ ansible-playbook -vvi hosts site.yml
 
-## init_env
+## Playbooks
+### init_env
 Initialize a minimal Linux env for development or production ready env
  - add a normal user and setup password
  - enable sudo and add normal user to sudoers

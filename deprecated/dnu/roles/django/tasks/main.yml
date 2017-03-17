@@ -1,0 +1,3 @@
+- name: Install Django
+  pip: name=django version={{ django_version }}
+  become: true

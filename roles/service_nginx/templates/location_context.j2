@@ -1,0 +1,7 @@
+    {% for location in nginx_locations %}
+    location {{ location.match_modifier|default() }} {{ location.match_pattern }} {
+        {% if location.alias is defined  %}
+        alias {{ location.alias }};
+        {% endif %}
+    }
+    {% endfor %}

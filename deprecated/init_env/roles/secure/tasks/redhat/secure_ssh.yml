@@ -1,0 +1,13 @@
+---
+- block:
+  - name: Disable X11 forwarding
+    lineinfile: dest=/etc/ssh/sshd_config regexp='^X11Forwarding' line="X11Forwarding no"
+  - name: Limit MaxAuthTries to be 3
+    lineinfile: dest=/etc/ssh/sshd_config regexp='^MaxAuthTries' line="MaxAuthTries 3"
+  - name: Change SSHD port to what we specified
+    lineinfile: dest=/etc/ssh/sshd_config regexp='^Port' line="Port {{ sshd_port }}"
+  - name: Disable root login
+    lineinfile: dest=/etc/ssh/sshd_config regexp='^PermitRootLogin' line="PermitRootLogin no"
+  always:
+    - name: Restart sshd service
+      service: name=sshd state=restarted

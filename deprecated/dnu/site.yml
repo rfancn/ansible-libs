@@ -1,0 +1,16 @@
+---
+- hosts: all
+  vars_prompt:
+    - name: project_name
+      prompt: "Please input project name"
+      private: no
+    - name: project_home
+      prompt: "Please input project home dir"
+      private: no
+  any_errors_fatal: true
+  gather_facts: true
+  roles:
+    - common
+    - django
+    - nginx
+    - uwsgi

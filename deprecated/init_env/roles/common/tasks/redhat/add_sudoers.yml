@@ -1,0 +1,18 @@
+- name: Install sudo package
+  yum: name=sudo
+
+- name: Uncomment wheel group
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    # regular express matched, then line will be replace with the same matched pattern
+    # otherwise, the line will be appended
+    regexp: '^%wheel\s*ALL=\(ALL\)\s*ALL$'
+    line: '%wheel        ALL=(ALL)        ALL'
+    validate: 'visudo -cf %s'
+    backup: yes
+
+- name: Add normal user to wheel group
+  user: name={{ normal_user }} groups=wheel
+
+

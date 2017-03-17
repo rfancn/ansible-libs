@@ -1,0 +1,6 @@
+python_executable: python{{ target_version }}
+pip_executable: pip{{target_version}}
+virtualenv_home: ~/.virtualenvs
+virtualenv_workon_home: $HOME/.virtualenvs
+virtualenvwrapper_virtualenv_args: --no-site-packages
+bashrc_file: ~/.bashrc

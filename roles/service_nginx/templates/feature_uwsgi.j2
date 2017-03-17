@@ -1,0 +1,6 @@
+location / {
+  include uwsgi_params;
+  uwsgi_pass unix:/var/run/uwsgi/{{ project_name }}.sock;
+}
+
+

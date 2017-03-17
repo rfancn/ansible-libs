@@ -1,0 +1,28 @@
+---
+- hosts: all
+  vars_prompt:
+    - name: "var_user"
+      prompt: "What's normal user you want to create?"
+      private: no
+    - name: "var_user_pass"
+      prompt: "Please input normal user password"
+      private: yes
+    - name: "var_user_pass_confirmed"
+      prompt: "Please confirm normal user password again"
+      private: yes
+    - name: "var_sshd_port"
+      prompt: "What's sshd port you want to use?"
+      private: no
+  any_errors_fatal: true
+  gather_facts: true
+  pre_tasks:
+    - name: Validate User Passowrd
+      fail: msg="Your password doesn't match!"
+      when: var_user_pass != var_user_pass_confirmed
+    - name: Validate SSHD Port
+      fail: msg="Invalid sshd port '{{ sshd_port }}'"
+      when: var_sshd_port|int == 0  or var_sshd_port|int > 65535
+    - debug: msg="Normal User->{{ var_user }} SSHD Port->{{ var_sshd_port }}"
+  roles:
+    - ensure_user
+    #- secure

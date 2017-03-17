@@ -1,0 +1,8 @@
+# uwsgi processes num
+process_num: 2
+# uwsgi thread num
+thread_num: 2
+# default project_name
+project_name: test
+# default project_name
+project_home: /tmp

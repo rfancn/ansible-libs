@@ -1,0 +1,24 @@
+server {
+
+listen       {{ nginx_listen }};
+server_name  {{ nginx_server_name }};
+
+location = favicon.ico { access_log off; log_not_found off; }
+
+access_log {{ nginx_access_log }};
+error_log {{ nginx_error_log }};
+
+{% if nginx_root is defined %}
+root {{ nginx_root }};
+{% endif %}
+index {{ nginx_index }};
+
+{% if nginx_locations is defined %}
+{% include "location_context.j2" %}
+{% endif %}
+
+{% if nginx_feature is defined %}
+{% include nginx_feature_include_file %}
+{% endif %}
+
+}

@@ -1,0 +1,3 @@
+---
+dependencies:
+  - { role: ensure_epel, when: "ansible_os_family|lower == 'redhat'"}

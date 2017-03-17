@@ -1,0 +1,12 @@
+---
+- name: Check if epel-release can be installed or not
+  fail: msg="epel-release packages can not be installed on {{ ansible_distribution }}"
+  when: ansible_os_family|lower != "redhat"
+
+- name: Check if epel-release installed or not
+  yum: name=epel-release state=installed
+  register: result_is_epel_installed
+
+- name: Install epel-release package
+  yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+  when: result_is_epel_installed | failed

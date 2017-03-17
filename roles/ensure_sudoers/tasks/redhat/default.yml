@@ -1,0 +1,16 @@
+- name: Ensure sudo package
+  yum: name=sudo
+
+- name: Enable wheel group
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    # regular express matched, then line will be replace with the same matched pattern
+    # otherwise, the line will be appended
+    regexp: '^%wheel\s*ALL=\(ALL\)\s*ALL$'
+    line: '%wheel        ALL=(ALL)        ALL'
+    validate: 'visudo -cf %s'
+    backup: yes
+
+- name: Add to wheel group
+  user: name={{ var_sudo_user }} groups=wheel

@@ -1,0 +1,4 @@
+---
+package_python:
+  - python
+  - python-devel

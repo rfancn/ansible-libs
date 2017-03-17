@@ -1,0 +1,8 @@
+[uwsgi]
+plugins = python
+master = true
+processes = {{ process_num }}
+threads = {{ thread_num }}
+socket = /run/uwsgi/%(vassal_name).sock
+# clear environment on exit, try to remove all of the generated file/sockets
+vacuum = true

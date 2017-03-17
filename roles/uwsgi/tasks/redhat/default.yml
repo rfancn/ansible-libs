@@ -1,0 +1,27 @@
+---
+- block:
+  - name: Install Uwsgi package
+    yum: name={{ item }} state=present
+    with_items:
+      - uwsgi
+      - uwsgi-plugin-python
+  - name: Copy default vassable config file
+    template: src=uwsgi-vassals-default.ini.j2 dest=/etc/uwsgi-vassals-default.ini
+  # When 'emperor-tyrant = true' is set,
+  # the vassal process’s uid/gid will be set to the same as vassal config file
+  # Here it means file itself, not the uid/gid value specified in file content.
+  # Set the group to be Nginx let nginx process also can read/write to unix sock file
+  - name: Copy specific uwsgi vassal config file
+    template: src=project-uwsgi.ini.j2 dest=/etc/uwsgi.d/{{ project_name }}-uwsgi.ini owner=uwsgi group=nginx
+  - name: Copy global uwsgi config file
+    template: src=uwsgi.ini.j2 dest=/etc/uwsgi.ini
+  #- name: Ensure /var/run/uwsgi has the correct permission
+  #  file: dest=/var/run/uwsgi owner=uwsgi group=uwsgi
+  # In EL6 change owner:group of /var/run will nto chagne /run, so it explictly change here
+  - name: Ensure /run/uwsgi has the correct permission
+    file: dest=/run/uwsgi owner=uwsgi group=uwsgi
+    notify: restart uwsgi
+  become: true
+
+
+

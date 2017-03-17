@@ -1,0 +1,11 @@
+- name: Check required variables
+  fail: msg="Required variables->var_user, var_user_pass"
+  when: var_user is not defined or var_user_pass is not defined
+
+- name: Check user already exist or not
+  shell: id {{ var_user }}
+  register: result_is_user_exist
+
+- name: "Add user: {{ var_user }}"
+  user: name={{ var_user }} password={{ var_user_pass | password_hash('sha512') }}
+  when: result_is_user_exist | failed

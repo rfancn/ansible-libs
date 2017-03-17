@@ -1,0 +1,3 @@
+---
+nginx_index: index.php index.html index.htm
+nginx_feature_include_file: feature_{{ nginx_feature }}.j2

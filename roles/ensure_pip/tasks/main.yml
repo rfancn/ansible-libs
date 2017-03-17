@@ -1,0 +1,27 @@
+---
+- name: Check required variables
+  fail: msg="Required variables->target_version missed"
+  when: target_version is not defined
+
+- name: Check specfic verion of pip exist or not
+  command: "{{ pip_executable }} -V"
+  register: result_is_pip_existed
+  ignore_errors: True
+
+- block:
+  - name: Make sure wget package is installed
+    yum: name=wget
+  - name: Create tempoary build dir to install pip
+    command: python -c 'import tempfile; print tempfile.mkdtemp()'
+    register: result_create_temp_dir
+  - name: Download and build pip
+    shell: "cd {{ result_create_temp_dir.stdout }} && wget {{ pip_source_url }} && {{ python_executable }} get-pip.py"
+  always:
+    - name: msg="Remove temp dir->{{ result_create_temp_dir.stdout }}"
+      file: dest="{{ result_create_temp_dir.stdout }}/"  state=absent
+  become: true
+  when: result_is_pip_existed | failed
+
+
+- name: Ensure pip is at the latest version
+  pip: name=pip state=latest

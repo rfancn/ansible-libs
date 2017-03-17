@@ -1,5 +1,10 @@
 # Ansible Playbooks
 
+## INSTRUCTIONS
+$ ansible-playbook -vvvi hosts playbooks/[playbook-filename]
+e,g:
+$ ansible-playbook -vvvi hosts playbooks/initenv.yml
+
 ## playbook: initenv(mostly works for VPS initialzation)
 Initialize a minimal Linux env for production ready env
  - add a normal user and setup password

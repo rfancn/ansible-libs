@@ -1,0 +1,13 @@
+- name: Get current pip version
+  shell: pip -V
+  register: pip_version_info
+
+# when we find that current pip is not the target version one
+# as fact variable have high priority than default role varaible,
+# set fact install meathod to be specific here
+- name: Detect virtualenv install method beased on current pip version
+  set_fact: virtualenv_install_method=specific
+  when: pip_version_info.stdout.find("{{ target_version }}") == -1
+
+- name: Load virtualenv install tasks
+  include: "{{ virtualenv_install_method }}.yml"

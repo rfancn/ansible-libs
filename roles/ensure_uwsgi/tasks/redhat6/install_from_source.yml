@@ -1,0 +1,43 @@
+---
+- include_vars: "{{ uwsgi_platform_dirname }}/python{{ target_version }}.yml"
+
+# Prebuild
+- block:
+  - name: Make sure uwsgi build essential packages are installed
+    package : name={{ item }}
+    with_items: '{{ uwsgi_build_essential }}'
+  - name: Make sure uwsgi build extra packages are installed
+    package: name={{ item }}
+    with_items: '{{ uwsgi_build_extras }}'
+  become: yes
+
+# Build and install uwsgi
+- block:
+  - name: Create uwsgi tempoary build dir
+    command: python -c 'import tempfile; print tempfile.mkdtemp()'
+    register: result_uwsgi_build_dir
+  - name: Download uwsgi source package
+    get_url: url={{ uwsgi_source_url }} dest={{ result_uwsgi_build_dir.stdout }} validate_certs=false
+  - name: Extract uwsgi source package
+    shell: tar zxvf uwsgi*.tar.gz --strip 1
+    args:
+      chdir:  "{{ result_uwsgi_build_dir.stdout }}"
+  - name: Build uwsgi binary with the language-independent features built in
+    shell: make PROFILE=nolang
+    args:
+      chdir:  "{{ result_uwsgi_build_dir.stdout }}"
+  - name: Build specific uwsgi python plugin
+    shell: PYTHON={{ uwsgi_python_version }} ./uwsgi --build-plugin "plugins/python {{ uwsgi_python_plugin_name }}"
+    args:
+      chdir: "{{ result_uwsgi_build_dir.stdout }}"
+  - name: Create uwsgi installation dir
+    file: dest={{ uwsgi_home }} state=directory
+    become: true
+  - name: Install uwsgi binary and python plugin
+    shell: cp -f uwsgi {{ uwsgi_python_plugin_file }} {{ uwsgi_home }}
+    args:
+      chdir: "{{ result_uwsgi_build_dir.stdout }}"
+    become: true
+  always:
+    - name: msg="Remove uwsgi build temp dir->{{ result_uwsgi_build_dir.stdout }}"
+      file: dest="{{ result_uwsgi_build_dir.stdout }}/"  state=absent

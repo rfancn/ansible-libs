@@ -1,0 +1,14 @@
+{% extends "base.conf.j2" %}
+
+{% block uwsgi_feature %}
+location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass unix:/run/php-fpm/{{ project_name }}.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_read_timeout 120;
+        include fastcgi_params;
+}
+{% endblock %}
+
+

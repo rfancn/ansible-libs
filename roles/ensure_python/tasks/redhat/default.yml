@@ -1,18 +1,13 @@
 ---
-- include_vars: "redhat{{ansible_distribution_major_version}}.yml"
+- include_vars: "{{ ansible_distribution | lower }}.yml"
 
-- name: Install IUS (CentOS) repo.
-  package: name={{item}}
-  with_items:
-    - https://centos{{ ansible_distribution_major_version }}.iuscommunity.org/ius-release.rpm
-  when: ansible_distribution == "CentOS"
+- name: Ensure epel-release package for non-centos distribution
+  yum: name=epel_release_package_url
+  when: ansible_distribution | lower != "centos"
   become: yes
 
-- name: Install IUS (RHEL) repo.
-  package: name={{item}}
-  with_items:
-    - https://rhel{{ ansible_distribution_major_version }}.iuscommunity.org/ius-release.rpm
-  when: ansible_distribution == "Red Hat Enterprise Linux"
+- name: Install IUS repo.
+  package: name={{ ius_release_package_url }}
   become: yes
 
 - name: Import IUS Community Project GPG key
@@ -20,16 +15,16 @@
   become: yes
 
 - name : Install Development Tools
-  package : name={{ item }} state=latest
+  yum : name={{ item }} state=latest
   with_items: '{{ package_build_essential }}'
   become: yes
 
 - name : Install Extra Libraries
-  package : name={{ item }} state=latest
+  yum : name={{ item }} state=latest
   with_items: '{{ package_python_extras }}'
   become: yes
 
 - name : Install Python
-  package : name={{ item }} state=latest
+  yum : name={{ item }} state=latest
   with_items: '{{ package_python }}'
   become: yes

@@ -1,0 +1,7 @@
+---
+dependencies:
+  - ensure_python
+  - ensure_pip
+  - ensure_virtualenv
+  - service_nginx
+  - service_uwsgi

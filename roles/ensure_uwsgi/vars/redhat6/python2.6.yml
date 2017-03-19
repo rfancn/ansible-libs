@@ -1,0 +1,5 @@
+uwsgi_python_version: python2.6
+uwsgi_python_plugin_name: python26
+uwsgi_python_plugin_file: python26_plugin.so
+uwsgi_build_extras:
+  - python-devel

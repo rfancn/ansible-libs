@@ -1,0 +1,14 @@
+---
+- include_vars: "{{ uwsgi_platform_dirname }}/common.yml"
+
+- name: Check uwsgi binary exist or not
+  shell: "{{ uwsgi_prog }} --version"
+  register: result_uwsgi_is_installed
+  ignore_errors: true
+
+# Our build uwsgi binary will not contain any plugin,
+# if we can find python version info here,
+# then we need rebuild it
+- name: Load install tasks
+  include: install_from_source.yml
+  when: result_uwsgi_is_installed | failed

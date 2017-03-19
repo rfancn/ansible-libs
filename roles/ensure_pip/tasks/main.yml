@@ -5,23 +5,24 @@
 
 - name: Check specfic verion of pip exist or not
   command: "{{ pip_executable }} -V"
-  register: result_is_pip_existed
+  register: result_pip_is_installed
   ignore_errors: True
 
 - block:
-  - name: Make sure wget package is installed
-    yum: name=wget
   - name: Create tempoary build dir to install pip
     command: python -c 'import tempfile; print tempfile.mkdtemp()'
-    register: result_create_temp_dir
-  - name: Download and build pip
-    shell: "cd {{ result_create_temp_dir.stdout }} && wget {{ pip_source_url }} && {{ python_executable }} get-pip.py"
+    register: result_pip_build_dir
+  - name: Download get-pip.py
+    get_url: url={{ pip_source_url }} dest={{ result_pip_build_dir.stdout }}
+  - name: Build pip
+    shell: "{{ python_executable }} get-pip.py"
+    args:
+      chdir: "{{ result_pip_build_dir.stdout }}"
   always:
     - name: msg="Remove temp dir->{{ result_create_temp_dir.stdout }}"
-      file: dest="{{ result_create_temp_dir.stdout }}/"  state=absent
+      file: dest="{{ result_pip_build_dir.stdout }}/"  state=absent
   become: true
-  when: result_is_pip_existed | failed
-
+  when: result_pip_is_installed | failed
 
 - name: Ensure pip is at the latest version
   pip: name=pip state=latest

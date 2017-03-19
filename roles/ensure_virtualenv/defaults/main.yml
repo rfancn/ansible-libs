@@ -1,3 +1,5 @@
+virtualenv_install_method: standard
+
 python_executable: python{{ target_version }}
 pip_executable: pip{{target_version}}
 virtualenv_home: ~/.virtualenvs

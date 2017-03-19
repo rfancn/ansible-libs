@@ -1,0 +1,7 @@
+# construct a uwsgi platform dir for invoking different tasks and variables under specific dir
+- name: Register platform related variable
+  set_fact:
+    uwsgi_platform_dirname: "{{ ansible_os_family | lower }}{{ ansible_distribution_major_version }}"
+
+- name: Load Linux distribution specfic tasks
+  include: "{{ uwsgi_platform_dirname }}/default.yml"

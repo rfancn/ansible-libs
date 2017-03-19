@@ -1,0 +1,18 @@
+[uwsgi]
+vassal_name = {{ project_name }}
+project_home = {{ project_home }}
+touch-reload= %(project_home)
+chdir = %(project_home)
+module = %(vassal_name).wsgi:application
+logto2 = /tmp/%(vassal_name)-uwsgi.log
+{% if uwsgi_plugins_dir is defined %}
+plugins-dir = {{ uwsgi_plugins_dir }}
+{% endif %}
+{% if uwsgi_plugin is defined %}
+plugin = {{ uwsgi_plugin }}
+{% endif %}
+{% if project_virtualenv_path is defined %}
+# uwsgi virtualenv home dir
+home = {{ project_virtualenv_path }}
+{% endif %}
+

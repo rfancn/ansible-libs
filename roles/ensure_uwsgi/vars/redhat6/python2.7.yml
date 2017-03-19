@@ -1,0 +1,5 @@
+uwsgi_python_version: python2.7
+uwsgi_python_plugin_name: python27
+uwsgi_python_plugin_file: python27_plugin.so
+uwsgi_build_extras:
+  - python27-devel

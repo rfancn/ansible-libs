@@ -1,9 +1,0 @@
-[uwsgi]
-vassal_name = {{ project_name }}
-project_home = {{ project_home }}
-chdir = %(project_home)
-touch-reload= %(project_home)
-module = %(vassal_name).wsgi:application
-chmod-socket = 660
-logto2 = /tmp/%(vassal_name)-uwsgi.log
-env = LANG=en_US.UTF-8

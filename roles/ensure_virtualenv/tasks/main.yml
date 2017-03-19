@@ -3,34 +3,15 @@
   fail: msg="Required variables->target_version missed"
   when: target_version is not defined
 
-- name: Install virtualenv virtualenvwrapper
-  pip: name={{ item }} executable={{ pip_executable }}
-  with_items:
-    - virtualenv
-    - virtualenvwrapper
+- name: Check if virtualenv has been installed or not
+  shell: virtualenv --version
+  register: result_virtualenv_is_installed
 
-- block:
-  - name: Make sure which utility is installed
-    package: name=which
-  - name: Get specific python path
-    command: which {{ python_executable }}
-    register: result_vewrapper_python_path
-  - name: Get virtualenvwrapp.sh path
-    command: which virtualenvwrapper.sh
-    register: result_vewrapper_script_path
-  - name: Get virtualenvwrapper_lazy.sh path
-    command: which virtualenvwrapper_lazy.sh
-    register: result_vewrapper_lazy_script_path
-  - command: mkdir -p {{ virtualenv_home }}
-  - name: Insert/Update "virtualenv" configuration block in bashrc
-    blockinfile:
-      dest: "{{ bashrc_file }}"
-      block: |
-        export VIRTUALENVWRAPPER_PYTHON={{ result_vewrapper_python_path.stdout }}
-        export VIRTUALENVWRAPPER_VIRTUALENV_ARGS="{{ virtualenvwrapper_virtualenv_args }}"
-        export WORKON_HOME={{ virtualenv_workon_home }}
-        export VIRTUALENVWRAPPER_SCRIPT={{ result_vewrapper_script_path.stdout }}
-        source {{ result_vewrapper_lazy_script_path.stdout }}
+- name: Install virtualenv
+  include: default.yml
+  when: result_virtualenv_is_installed | failed
+
+
 
 
 

@@ -1,0 +1,2 @@
+uwsgi_process_num: 2
+uwsgi_thread_num: 2

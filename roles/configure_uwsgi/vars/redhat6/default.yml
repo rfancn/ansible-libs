@@ -1,0 +1,3 @@
+uwsgi_plugins_dir: /usr/local/lib/uwsgi/
+uwsgi_plugin: python27
+uwsgi_prog: /usr/local/lib/uwsgi/uwsgi

@@ -1,2 +1,0 @@
----
-nginx_feature_include_file: feature_{{ nginx_feature }}.j2

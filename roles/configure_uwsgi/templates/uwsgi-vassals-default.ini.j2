@@ -1,0 +1,6 @@
+[uwsgi]
+master = true
+processes = {{ uwsgi_process_num }}
+threads = {{ uwsgi_thread_num }}
+socket = /run/uwsgi/%(vassal_name).sock
+chmod-socket = 660

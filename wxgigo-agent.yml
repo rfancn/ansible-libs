@@ -1,0 +1,48 @@
+# Create Django env in Nginx+uWSGI
+- hosts: all
+  vars:
+    target_version: 2.7
+    project_name: wxgigo
+    project_home: /home/ryan/wxgigo/
+  any_errors_fatal: true
+  gather_facts: true
+  roles:
+    - ensure_python
+    - ensure_pip
+    - ensure_virtualenv
+    - ensure_nginx
+    - ensure_uwsgi
+
+  tasks:
+    - name: Make sure project specific virtualenv created
+      shell: source ~/.bashrc && lsvirtualenv
+      register: result_project_virtualenv_list
+      ignore_errors: true
+
+    - name: Create project specific virtualenv if it is not created yet
+      shell: source ~/.bashrc && mkvirtualenv {{ project_name }} && deactivate
+      when: result_project_virtualenv_list.stdout.find("{{ project_name }}") == -1
+
+    - name: Get project virtualenv path
+      shell: source ~/.bashrc && workon {{ project_name }} && cdvirtualenv && pwd && deactivate
+      register: project_virtualenv_path
+
+    - name:  Install additional python packages
+      shell: source ~/.bashrc && workon {{ project_name }} && pip install django && deactivate
+
+    - debug: msg="Install wxgigo"
+    - debug: msg="Get wxgigo project home"
+    - name: Confingure nginx
+      include_role:
+        name: configure_nginx
+      vars:
+        uwsgi_feature: "uwsgi"
+
+    - name: Configure uwsgi
+      include_role: name=configure_nginx
+
+    - name: Set correct permission of project specific uwsgi config file
+      file: dest=/etc/uwsgi.d/{{ project_name }}-uwsgi.ini owner=uwsgi group=nginx
+      become: true
+
+

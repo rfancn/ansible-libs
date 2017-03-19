@@ -1,0 +1,14 @@
+server {
+    listen       {{ project_listen }};
+    server_name  {{ project_server_name }};
+
+    location = favicon.ico { access_log off; log_not_found off; }
+
+    access_log {{ project_access_log }};
+    error_log {{ project_error_log }};
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/run/uwsgi/{{ project_name }}.sock;
+    }
+}

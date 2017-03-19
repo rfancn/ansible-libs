@@ -1,0 +1,13 @@
+[uwsgi]
+uid = uwsgi
+gid = uwsgi
+emperor = /etc/uwsgi.d
+emperor-tyrant = true
+pidfile2 = /run/uwsgi/uwsgi.pid
+stats = /run/uwsgi/stats.sock
+cap = setgid,setuid
+env = LANG=en_US.UTF-8
+# clear environment on exit, try to remove all of the generated file/sockets
+vacuum = true
+# include config templates to vassals config
+vassals-include = /etc/uwsgi-vassals-default.ini

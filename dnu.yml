@@ -1,0 +1,17 @@
+# Create Django env in Nginx+uWSGI
+- hosts: all
+  vars:
+    - project_name: wxgigo
+    - target_version: 2.7
+  any_errors_fatal: true
+  gather_facts: true
+  roles:
+    - env_django_nginx_uwsgi
+    #- ensure_python
+    #- ensure_pip
+    #- { role: service_nginx, nginx_feature: uwsgi }
+    #- service_uwsgi
+    #- ensure_virtualenv
+  #tasks:
+  #  - name: Install django in virtualenv
+  #    shell: source ~/.bashrc && mkvirtualenv wxgigo && pip install django=="1.8.*" && deactivate

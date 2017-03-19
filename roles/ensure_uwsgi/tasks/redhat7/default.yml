@@ -1,0 +1,10 @@
+---
+- block:
+  - name: Install Uwsgi package
+    yum: name={{ item }} state=present
+    with_items:
+      - uwsgi
+      - uwsgi-plugin-python
+    become: true
+
+

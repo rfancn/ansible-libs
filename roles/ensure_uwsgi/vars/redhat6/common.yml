@@ -1,0 +1,8 @@
+---
+uwsgi_home: /usr/local/lib/uwsgi/
+uwsgi_prog: "{{ uwsgi_home }}uwsgi"
+
+uwsgi_build_essential:
+  - "@Development Tools"
+  - libcap-devel
+  - pcre-devel

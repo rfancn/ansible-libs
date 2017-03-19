@@ -13,4 +13,4 @@
     backup: yes
 
 - name: Add to wheel group
-  user: name={{ var_sudo_user }} groups=wheel
+  user: name={{ privileged_user }} groups=wheel

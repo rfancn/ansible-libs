@@ -1,0 +1,29 @@
+---
+# configurate uwsgi fro Redhat6
+- include_vars: "{{ uwsgi_platform_dirname }}/default.yml"
+
+# prepare uwsgi running env
+- block:
+  - name: Make sure uwsgi owner and group are created
+    user: name=uwsgi
+  - name: Make sure /etc/uwsgi.d/ dir exist
+    file: dest=/etc/uwsgi.d/ state=directory
+  - name: Make sure /run/uwsgi/ dir exist
+    file: dest=/run/uwsgi state=directory owner=uwsgi group=uwsgi
+  become: true
+
+# configure uwsgi
+- block:
+  - name: Copy uwsgi service control file to /etc/init.d/
+    template: src=uwsgi.sysv.j2 dest=/etc/init.d/uwsgi mode=755 backup=true
+  - name: Copy main uwsgi config file
+    template: src=uwsgi.ini.j2 dest=/etc/uwsgi.ini
+  - name: Copy default vassable include file
+    template: src=uwsgi-vassals-default.ini.j2 dest=/etc/uwsgi-vassals-default.ini
+  # When 'emperor-tyrant = true' is set,
+  # the vassal process’s uid/gid will be set to the same as vassal config file
+  # Here it means file itself, not the uid/gid value specified in file content.
+  # Set the group to be Nginx let nginx process also can read/write to unix sock file
+  - name: Copy project specific uwsgi vassal config file
+    template: src=project-uwsgi.ini.j2 dest=/etc/uwsgi.d/{{ project_name }}-uwsgi.ini owner=uwsgi group=uwsgi
+  become: true

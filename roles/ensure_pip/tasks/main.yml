@@ -19,7 +19,7 @@
     args:
       chdir: "{{ result_pip_build_dir.stdout }}"
   always:
-    - name: msg="Remove temp dir->{{ result_create_temp_dir.stdout }}"
+    - name: msg="Remove temp dir->{{ result_pip_build_dir.stdout }}"
       file: dest="{{ result_pip_build_dir.stdout }}/"  state=absent
   become: true
   when: result_pip_is_installed | failed

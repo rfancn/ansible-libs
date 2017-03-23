@@ -1,0 +1,5 @@
+- include: tasks/{{ ansible_os_family | lower }}/{{ item }}.yml
+  with_items:
+    - disable_selinux
+    - disable_firewall
+    - secure_ssh

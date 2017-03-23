@@ -24,5 +24,6 @@
       when: var_sshd_port|int == 0  or var_sshd_port|int > 65535
     - debug: msg="Normal User->{{ var_user }} SSHD Port->{{ var_sshd_port }}"
   roles:
-    - ensure_user
-    #- secure
+    - { role: ensure_user, normal_user: "{{ var_user }}", normal_user_pass: "{{ var_user_pass }}" }
+    - { role: ensure_sudoers, privileged_user: "{{ var_user }}" }
+    - { role: secure, secure_sshd_port: "{{ var_sshd_port }}" }

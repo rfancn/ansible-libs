@@ -32,14 +32,15 @@
 
     - debug: msg="Install wxgigo"
     - debug: msg="Get wxgigo project home"
+
     - name: Confingure nginx
       include_role:
         name: configure_nginx
       vars:
-        uwsgi_feature: "uwsgi"
+        nginx_feature: "uwsgi"
 
     - name: Configure uwsgi
-      include_role: name=configure_nginx
+      include_role: name=configure_uwsgi
 
     - name: Set correct permission of project specific uwsgi config file
       file: dest=/etc/uwsgi.d/{{ project_name }}-uwsgi.ini owner=uwsgi group=nginx

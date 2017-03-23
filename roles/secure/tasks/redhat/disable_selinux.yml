@@ -1,0 +1,9 @@
+---
+- name: Check SELinux is enabled or not
+  shell: sestatus -v
+  register: result_sestatus
+  ignore_errors: True
+
+- name: Disable SELinux if it is enabled
+  lineinfile: dest=/etc/sysconfig/selinux regexp='^SELINUX\s*=' line='SELINUX=disabled'
+  when: result_sestatus|succeeded and result_sestatus.stdout.find('disabled') == -1

@@ -6,6 +6,7 @@
 - name: Check if virtualenv has been installed or not
   shell: virtualenv --version
   register: result_virtualenv_is_installed
+  ignore_errors: true
 
 - name: Install virtualenv
   include: default.yml

@@ -1,0 +1,19 @@
+{% extends "base.conf.j2" %}
+
+{% if block_nginx_index %}
+index index.php index.html index.htm;
+{% endblock %}
+
+{% block block_nginx_feature %}
+location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass unix:/run/php-fpm/{{ project_name }}.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_read_timeout 120;
+        include fastcgi_params;
+}
+{% endblock %}
+
+

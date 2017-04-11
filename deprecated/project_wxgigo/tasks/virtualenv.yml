@@ -1,7 +1,0 @@
-- name: Create a wxgigo virtualenv(workon wxgigo && cdvirtualenv && pwd)
-- name: Get wxgigo virtualenv path, set uwsgi home= this path
-- name: Install wxgigo package in virtualenv
-- name: Get wxgigo module path, os.path.abspath(wxgigo.__file__), take it as project_home
-- name: link nginx conf file to nginx conf dir, set correct permission
-- name: link uwsgi conf file to uwsgi conf dir, set correct permission
-- name: start service nginx/uwsgi

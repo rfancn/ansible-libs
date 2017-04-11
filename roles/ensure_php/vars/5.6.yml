@@ -1,0 +1,4 @@
+php_package_names:
+  - php56u
+  - php56u-mbstring
+  - php56u-gd

@@ -1,0 +1,4 @@
+php_package_names:
+  - php55u
+  - php55u--mbstring
+

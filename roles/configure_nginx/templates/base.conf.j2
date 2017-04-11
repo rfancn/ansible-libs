@@ -10,8 +10,9 @@ error_log {{ nginx_error_log }};
 
 {% if nginx_root is defined %}
 root {{ nginx_root }};
-{% endif %}
-index {{ nginx_index }};
+{% endblock %}
+
+{% if block_nginx_index %}{% endblock %}
 
 {% if nginx_locations is defined %}
 {% include "location_context.j2" %}

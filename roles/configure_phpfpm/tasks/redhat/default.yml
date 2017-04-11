@@ -1,0 +1,16 @@
+- block:
+  - name: Change php-fpm process owner to {{ phpfpm_user }}
+    lineinfile: dest=/etc/php-fpm.d/www.conf state=present regexp="^user =" line="user = {{ phpfpm_user }}"
+  - name: Change php-fpm process owner to {{ phpfpm_user }}
+    lineinfile: dest=/etc/php-fpm.d/www.conf state=present regexp="^group =" line="group = {{ phpfpm_group }}"
+  - name: Change php-fpm listen socket owner to nobody
+    lineinfile: dest=/etc/php-fpm.d/www.conf state=present regexp="listen.owner =" line="listen.owner = {{ phpfpm_user }}"
+  - name:  Comment out php-fpm listen IP address line
+    lineinfile: dest=/etc/php-fpm.d/www.conf state=present regexp="listen = 127.0.0.1:9000" line=";listen = 127.0.0.1:9000"
+  - name: Change php-fpm listen socket to project name
+    lineinfile: dest=/etc/php-fpm.d/www.conf state=present regexp="^listen =" line="listen = /run/php-fpm/{{ project_name }}.sock"
+  - name: Change php-fpm session dir to {{ phpfpm_group }}
+    file: dest=/var/lib/php-fpm/session group={{ phpfpm_group }}
+  - name: Change php-fpm wsdlcache dir to {{ phpfpm_group }}
+    file: dest=/var/lib/php-fpm/wsdlcache group={{ phpfpm_group }}
+  become: yes

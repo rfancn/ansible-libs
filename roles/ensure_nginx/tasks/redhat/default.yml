@@ -1,12 +1,7 @@
 ---
 - block:
   - name: Install nginx package
-    yum: name=nginx state=present
-
-  - name: Insert firewalld rule for Nginx
-    #firewalld: port={{ nginx_listen }}/tcp permanent=true state=enabled immediate=yes
-    debug: msg="Insert firewall rule for nginx"
-    ignore_errors: yes
+    package: name=nginx state=present
 
   - name: Enable Nginx service and make sure it started
     service: name=nginx enabled=yes

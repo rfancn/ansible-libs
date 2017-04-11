@@ -1,0 +1,16 @@
+---
+- hosts: all
+  vars:
+    project_name: wordpress
+  any_errors_fatal: true
+  gather_facts: true
+  roles:
+    - { role: ensure_php, target_version: "5.6" }
+    - { role: ensure_phpfpm, target_version: "5.6"}
+    - ensure_nginx
+    - name: configure_nginx
+      nginx_feature: "php-fpm"
+      nginx_server_name: example.com
+      nginx_root: /var/www/html/wordpress
+    - name: configure_phpfpm
+      phpfpm_container: nginx

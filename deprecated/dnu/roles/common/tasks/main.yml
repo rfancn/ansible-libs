@@ -1,5 +1,0 @@
----
-- include:  tasks/{{ item }}.yml
-  with_items:
-    - ensure_epel
-    - ensure_pip

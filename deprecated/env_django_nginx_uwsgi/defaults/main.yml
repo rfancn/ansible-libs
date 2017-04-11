@@ -1,4 +1,0 @@
-project_listen: 80
-project_server_name: localhost
-project_access_log: /var/log/nginx/{{ project_name }}-access.log
-project_error_log: /var/log/nginx/{{ project_name }}-error.log

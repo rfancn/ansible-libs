@@ -1,8 +1,11 @@
 ---
 - hosts: all
   vars_prompt:
+    - name: "var_hostname"
+      prompt: "Please input new hostname"
+      private: no
     - name: "var_user"
-      prompt: "What's normal user you want to create?"
+      prompt: "What's normal user you want to create"
       private: no
     - name: "var_user_pass"
       prompt: "Please input normal user password"
@@ -11,7 +14,7 @@
       prompt: "Please confirm normal user password again"
       private: yes
     - name: "var_sshd_port"
-      prompt: "What's sshd port you want to use?"
+      prompt: "What's sshd port you want to use"
       private: no
   any_errors_fatal: true
   gather_facts: true
@@ -19,10 +22,16 @@
     - name: Validate User Passowrd
       fail: msg="Your password doesn't match!"
       when: var_user_pass != var_user_pass_confirmed
+    - name: Validate hostname
+      fail: msg="Invalid hostname '{{var_hostname }}'"
+      when: var_hostname|trim == ''
     - name: Validate SSHD Port
-      fail: msg="Invalid sshd port '{{ sshd_port }}'"
+      fail: msg="Invalid sshd port '{{ var_sshd_port }}'"
       when: var_sshd_port|int == 0  or var_sshd_port|int > 65535
     - debug: msg="Normal User->{{ var_user }} SSHD Port->{{ var_sshd_port }}"
+  tasks:
+    - name: Set hostname
+      hostname: name="{{ var_hostname }}"
   roles:
     - { role: ensure_user, normal_user: "{{ var_user }}", normal_user_pass: "{{ var_user_pass }}" }
     - { role: ensure_sudoers, privileged_user: "{{ var_user }}" }

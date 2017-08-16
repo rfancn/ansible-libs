@@ -1,6 +1,6 @@
 - name: Check required variables
-  fail: msg="Required variables->target_version missed"
-  when: target_version is not defined
+  fail: msg="Required variables->php_version missed"
+  when: php_version is not defined
 
 - name: Check if specific version of PHP is installed or not
   command: php-fpm -v
@@ -8,7 +8,7 @@
   ignore_errors: true
 
 - block:
-  - include_vars: "{{ target_version }}.yml"
+  - include_vars: "{{ php_version }}.yml"
   - include_role: name=ensure_epel
   - include_role: name=ensure_ius_release
   - name: Install specific php-fpm

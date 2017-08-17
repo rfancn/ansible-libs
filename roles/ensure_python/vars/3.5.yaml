@@ -1,3 +1,4 @@
 package_python:
   - python35u
+  - python35u-devel
   - python35u-pip

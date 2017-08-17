@@ -1,3 +1,4 @@
 package_python:
   - python27u
+  - python27u-devel
   - python27u-pip

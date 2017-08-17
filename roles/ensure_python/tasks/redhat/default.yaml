@@ -1,0 +1,7 @@
+---
+- include_vars: "{{ python_version }}.yaml"
+
+- name : Install Python
+  yum : name={{ item }} state=latest
+  with_items: '{{ package_python }}'
+  become: yes

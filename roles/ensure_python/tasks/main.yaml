@@ -1,0 +1,20 @@
+---
+- name: Check required variables
+  fail: msg="Required variables->python_version missed"
+  when: python_version is not defined
+
+- name: "Check if specific version of python is installed or not"
+  command: "{{ python_executable }} --version"
+  ignore_errors: true
+  changed_when: false
+  register: result_python_installed
+
+- name: redhat like OS actions
+  block:
+  - name: make sure ius_release package installed
+    include_role: name=ensure_ius_release
+  - name: execute OS specific operations
+    include: "{{ ansible_os_family|lower }}/default.yaml"
+  when: result_python_installed|failed
+  become: yes
+

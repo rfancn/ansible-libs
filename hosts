@@ -1,2 +1,2 @@
 [all]
-localhost:22 ansible_user=root ansible_ssh_pass=
+localhost:22 ansible_connection=local

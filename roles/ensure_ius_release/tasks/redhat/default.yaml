@@ -1,0 +1,12 @@
+- name: check if ius-release installed or not
+  command: yum list installed ius-release
+  register: result_ius_installed
+  ignore_errors: true
+
+- block:
+  - name: make sure epel-release package installed
+    include_role: ensure_epel
+  - name: install ius-release package
+    package: name="https://{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.iuscommunity.org/ius-release.rpm"
+  when: result_ius_installed | failed
+  become: yes

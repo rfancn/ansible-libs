@@ -1,16 +1,3 @@
 ---
-- name: Check if ius-release can be installed or not
-  fail: msg="epel-release packages can not be installed on {{ ansible_distribution }}"
-  when: ansible_os_family|lower != "redhat"
-
-- name: Check if ius-release installed or not
-  command: yum list installed ius-release
-  register: result_ius_installed
-  ignore_errors: true
-
-- name: Install epel-release package
-  package: name="https://{{ ansible_distribution }}{{ ansible_distribution_major_version }}.iuscommunity.org/ius-release.rpm"
-  when: result_ius_installed | failed
-  become: yes
-
-
+- name: ius-release distribution specific tasks
+  include: "{{ ansible_distribution|lower }}/default.yaml"

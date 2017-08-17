@@ -1,0 +1,3 @@
+- hosts: all
+  roles:
+    - {role: ensure_python, python_version: 3.6}

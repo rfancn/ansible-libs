@@ -1,0 +1,3 @@
+package_python:
+  - python36u
+  - python36u-pip

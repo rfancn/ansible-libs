@@ -1,0 +1,3 @@
+package_python:
+  - python35u
+  - python35u-pip

@@ -1,0 +1,22 @@
+- include_vars: "centos{{ ansible_distribution_major_version }}.yaml"
+
+- name: check if docker is installed or not
+  command: yum list installed {{ docker_package }}
+  register: result_installed
+  ignore_errors: true
+
+- block:
+  - name: uninstall old versions
+    yum : name={{ item }} state=absent
+    with_items: '{{ docker_old_packages }}'
+  - name: install required packages
+    yum : name={{ item }} state=latest
+    with_items: '{{ docker_required_packages }}'
+  - name: set up the stable repository
+    command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  - name: install docker community edition
+    yum: name={{ docker_package }} state=latest
+  - name: enable and start docker service
+    service: name=docker enabled=yes state=started
+  when: result_installed | failed
+  become: yes

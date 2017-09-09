@@ -1,0 +1,3 @@
+---
+- name: docker OS distribution specific tasks
+  include: "{{ ansible_distribution|lower }}/default.yaml"

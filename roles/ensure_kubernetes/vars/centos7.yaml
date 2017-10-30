@@ -1,7 +1,7 @@
 ---
-kube_repo_template: kubernetes.j2
-kube_repo_file: kubernetes.repo
-kube_repo_base_url: https://mirrors.aliyun.com/kubernetes/yum/repos/
+kube_repo_template: kube-aliyun.j2
+kube_repo_file: /etc/yum.repos.d/kubernetes.repo
+kube_repo_base_url: https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-{{ ansible_architecture }}/
 kube_repo_gpg_key: |
   https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
   https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg

@@ -5,8 +5,6 @@
   changed_when: false
   register: result_kube_installed
 
-- name: Install kubernetes if not installed
-  - name: execute OS specific operations
-    include: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
+- name: execute OS specific operations
+  include: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
   when: result_kube_installed|failed
-

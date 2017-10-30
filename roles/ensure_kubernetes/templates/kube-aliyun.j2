@@ -1,0 +1,8 @@
+[kubernetes]
+name=Kubernetes
+baseurl={{ kube_repo_base_url }}
+enabled=1
+# for aliyun yum repository, it need turn off gpgcheck
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey={{ kube_repo_gpg_key }}

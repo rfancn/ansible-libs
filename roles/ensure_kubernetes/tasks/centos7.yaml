@@ -1,0 +1,46 @@
+---
+- include_vars: "centos7.yaml"
+
+- name : Stop firewalld service
+  service: state="stopped" enabled="no"
+
+- name: Disable selinux
+  selinux:  state="disabled"
+
+- name: Enable ip_forward
+  sysctl: name="net.bridge.bridge-nf-call-iptables" value=1 sysctl_set="yes" state="present" reload="yes"
+
+- name: Disable swap persistently
+  - name: swap - remove current swaps from fstab
+    lineinfile:
+      dest: /etc/fstab
+      regexp: '^/[\S]+\s+none\s+swap '
+      state: absent
+  - name: swap - disable swap
+    command: swapoff --all
+    ignore_errors: yes
+  when: ansible_swaptotal_mb | int != 0
+
+- name: Install kubernetes packages
+  - name: Install kubernetes repository
+    template: src={{ kube_repo_template }} dest={{ kube_repo_file }}
+  - name: Yum install packages
+    yum : name={{ item }} state=latest
+    with_items: '{{ kube_packages }}'
+  - name: Enable and start docker service
+    service: name=docker enabled=yes state=started
+  # Issue: https://stackoverflow.com/questions/46726216/kubelet-fails-to-get-cgroup-stats-for-docker-and-kubelet-services
+  - name: Patch kubelet systemd start script for above issue
+    lineinfile:
+      dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+      regexp: '^Environment="KUBELET_CGROUP_ARGS='
+      line: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd --runtime-cgroups=/systemd/system.slice --kubelet-cgroups=/systemd/system.slice"
+  - name: Enable and start kubelet service
+    service: name=kubelet enabled=yes state=started
+
+
+
+
+
+
+

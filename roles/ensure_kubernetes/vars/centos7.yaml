@@ -1,0 +1,14 @@
+---
+kube_repo_template: kubernetes.j2
+kube_repo_file: kubernetes.repo
+kube_repo_base_url: https://mirrors.aliyun.com/kubernetes/yum/repos/
+kube_repo_gpg_key: |
+  https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+  https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+kube_packages:
+  - ethtool
+  - ebtables
+  - docker
+  - kubelet
+  - kubectl
+  - kubeadm

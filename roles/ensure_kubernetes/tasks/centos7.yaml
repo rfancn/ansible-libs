@@ -15,7 +15,7 @@
   - name: swap - remove current swaps from fstab
     replace:
       dest: /etc/fstab
-      regexp: '(^.*\s+swap\s+swap)'
+      regexp: '(^(?!#).*\s+swap\s+swap)'
       replace: '#\1'
   - name: swap - disable swap
     command: swapoff --all

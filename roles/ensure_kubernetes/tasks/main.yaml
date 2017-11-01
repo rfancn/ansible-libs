@@ -6,5 +6,5 @@
   register: result_kube_installed
 
 - name: execute OS specific operations
-  include_tasks: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
+  include: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
   when: result_kube_installed|failed

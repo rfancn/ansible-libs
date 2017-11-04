@@ -40,9 +40,10 @@
   - name: Enable and start kubelet service
     service: name=kubelet enabled=yes state=started
 
-
-
-
-
-
-
+# initialize master
+- block:
+  - name: init master
+    command: kubeadm init --pod-network-cidr=10.244.0.0/16
+  - name: apply network policy
+    command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  when: "'{{ kube_groupname_master }}' in group_names"

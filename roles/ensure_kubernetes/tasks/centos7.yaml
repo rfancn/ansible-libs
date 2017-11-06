@@ -23,6 +23,10 @@
 
 # install kubernete packages
 - block:
+  - name: Install yum-utils
+    yum: name=yum-utils
+  - name: Make sure there no pending yum transaction
+    command: yum-complete-transaction --cleanup-only 
   - name: Install kubernetes repository
     template: src={{ kube_repo_template }} dest={{ kube_repo_file }}
   - name: Yum install packages

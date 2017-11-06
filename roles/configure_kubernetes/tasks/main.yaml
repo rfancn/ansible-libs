@@ -1,0 +1,37 @@
+---
+- name: "Check if kubernetes are installed or not"
+  command: "kubectl version"
+  ignore_errors: true
+  changed_when: false
+  register: result_kube_installed
+
+
+# For main master node
+ - block:
+   - name: init main master node
+     command: kubeadm init --pod-network-cidr=10.244.0.0/16
+     register: result_master_init
+   - name: try generate worker node join command file
+     command: ls {{ kube_script_join_node }} || grep "kubeadm join --token" result_master_init.stdout > {{ kube_script_join_node }}
+   - name: try generate master member node join command file
+     command: ls {{ kube_script_join_master_member }} || grep "kubeadm join --master --token" result_master_init.stdout > {{ kube_script_join_master_member }}
+     ignore_errors: True
+   - name: setup master environment
+     shell:  mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
+   - name: apply network policy
+     command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+     when: "'{{ kube_group_master }}' in group_names"
+#
+#                                         # For master member nodes
+#                                         - name: join node
+#                                           command: sh {{ kube_script_join_master_member }}
+#                                             when: "'{{ kube_group_master_member }}' in group_names"
+#
+#                                             # For normal nodes
+#                                             - name: join node
+#                                               command: sh {{ kube_script_join_node }}
+#                                                 when: "'{{ kube_group_node }}' in group_names"
+#
+- name: execute OS specific operations
+  include: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
+  when: result_kube_installed|failed

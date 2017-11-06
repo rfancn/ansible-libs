@@ -1,0 +1,7 @@
+---
+kube_script_join_node: node_join_script 
+kube_script_join_master_member: master_member_join_script
+
+kube_group_master: master
+kube_group_master_member: master_member
+kube_group_node: node

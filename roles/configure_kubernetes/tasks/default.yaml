@@ -1,7 +1,7 @@
 ---
 # For main master node
-- block:
-  include "master.yaml"
+- name: Init master node
+  include: "master.yaml"
   when: kube_node_role == "master"
 
 # For master member nodes

@@ -5,7 +5,7 @@
 
 - block:
   - name: find node join command 
-    command: grep "kubeadm join --token" result_master_init.stdout 
+    command: grep -o 'kubeadm join --token .*' {{ result_master_init.stdout }}
     register: result_find_node_join_command
 
   - name: Set kube_command_join_node variable for future reference
@@ -13,7 +13,7 @@
 
 - block:
   - name: find master member join command
-    command: grep "kubeadm join --master --token" result_master_init.stdout
+    command: grep -o "kubeadm join --master --token .*" {{ result_master_init.stdout }}
     register: result_find_master_member_join_command
   - name: Set kube_command_join_master_member variable for future reference
     set_fact: kube_command_join_master_member={{ result_find_master_member_join_command.stdout }} 

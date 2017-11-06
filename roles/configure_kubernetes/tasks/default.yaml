@@ -1,4 +1,13 @@
 ---
+# reset environment
+- block:
+  - name: Reset kube stuff
+    command: kubeadm reset
+  - name: Clean home config dir
+    shell: rm -fr $HOME/.kube
+  - name: restart kubelet service to reload new cert if nessary
+    service: name=kubelet state=restarted
+
 # For main master node
 - name: Init master node
   include: "master.yaml"

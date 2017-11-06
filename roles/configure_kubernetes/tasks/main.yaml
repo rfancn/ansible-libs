@@ -1,10 +1,10 @@
 ---
-- name: "Check if kubernetes are installed or not"
+- name: "Check if kubeadm installed or not"
   command: "kubectl version"
   ignore_errors: true
   changed_when: false
-  register: result_kube_installed
+  register: result_kubeadm_installed
 
-- name: execute OS specific operations
+- name: Configure kubernetes
   include: "default.yaml"
-  when: result_kube_installed|failed
+  when: result_kubeadm_installed|succeeded

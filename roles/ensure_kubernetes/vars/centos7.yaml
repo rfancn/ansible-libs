@@ -2,6 +2,10 @@
 kube_script_join_node: node_join_script 
 kube_script_join_master_member: master_member_join_script
 
+kube_group_master: master
+kube_group_master_member: master_member
+kube_group_node: node
+
 kube_repo_template: kube-aliyun.j2
 kube_repo_file: /etc/yum.repos.d/kubernetes.repo
 kube_repo_base_url: https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-{{ ansible_architecture }}/

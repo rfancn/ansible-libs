@@ -13,16 +13,16 @@
     shell:  mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
   - name: apply network policy
     command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-  when: "{{ kube_node_role }}" == "master"
+  when: kube_node_role == "master"
 
 # For master member nodes
 - name: join master member node
   command: sh {{ kube_script_join_master_member }} 
-  when: "{{ kube_node_role }}" == "master_member"
+  when: kube_node_role == "master_member"
 
 # For normal nodes
 - name: join node
   command: sh {{ kube_script_join_node }} 
-  when: "{{ kube_node_role }}" == "node"
+  when: kube_node_role == "node"
   #when: "'{{ kube_group_node }}' in group_names"
 

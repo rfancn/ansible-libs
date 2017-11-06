@@ -6,12 +6,12 @@
 
 # For master member nodes
 - name: join master member node
-  command: hostvars[groups["master"][0]]["kube_command_mm_join"]
-  when: kube_node_role == "master_member"
+  command: '{{ hostvars[groups["master"][0]]["kube_command_mm_join"] }}'
+  when: kube_node_role == "master_member" and hostvars[groups["master"][0]]["kube_command_mm_join"] != ""
 
 # For normal nodes
 - name: join node
-  command: hostvars[groups["master"][0]]["kube_command_node_join"]
-  when: kube_node_role == "node"
+  command: '{{ hostvars[groups["master"][0]]["kube_command_node_join"] }}'
+  when: kube_node_role == "node" and hostvars[groups["master"][0]]["kube_command_node_join"] != ""
   #when: "'{{ kube_group_node }}' in group_names"
-
+  

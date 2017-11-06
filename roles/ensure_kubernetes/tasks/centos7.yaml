@@ -48,10 +48,11 @@
     shell:  mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
   - name: apply network policy
     command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-  when: "'{{ kube_group_master }}' in group_names"
+  when: "{{ kube_node_role }}" == "master"
 
 
 # For normal nodes
 - name: join node
-  command: {{ kube_join_command }}
-  when: "'{{ kube_group_node }}' in group_names"
+  command: {{ kube_node_join_command }}
+  when: "{{ kube_node_role }}" == "worker"
+  #when: "'{{ kube_group_node }}' in group_names"

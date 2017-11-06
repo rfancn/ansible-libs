@@ -1,6 +1,6 @@
 ---
-kube_group_master: master
-kube_group_node: node 
+kube_node_role: default
+kube_node_join_command: "echo 'empty join command'"
 kube_repo_template: kube-aliyun.j2
 kube_repo_file: /etc/yum.repos.d/kubernetes.repo
 kube_repo_base_url: https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-{{ ansible_architecture }}/

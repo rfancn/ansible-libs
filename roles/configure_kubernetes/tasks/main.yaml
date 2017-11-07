@@ -5,6 +5,9 @@
   changed_when: false
   register: result_kubeadm_installed
 
-- name: Configure kubernetes
-  include: "default.yaml"
+- block:
+  - name: Configure kubernetes
+    include: "reset.yaml"
+  - name: Load corresponding yaml based on role
+    include: "{{ kube_node_role }}.yaml"
   when: result_kubeadm_installed|succeeded

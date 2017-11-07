@@ -1,0 +1,5 @@
+# For normal nodes
+ - name: join node
+   command: '{{ hostvars[groups["master"][0]]["kube_command_node_join"] }}'
+   when: hostvars[groups["master"][0]]["kube_command_node_join"] != ""
+   #when: "'{{ kube_group_node }}' in group_names"

@@ -1,0 +1,6 @@
+---
+# For master member nodes
+- name: join master member node
+  command: '{{ hostvars[groups["master"][0]]["kube_command_mm_join"] }}'
+  when: hostvars[groups["master"][0]]["kube_command_mm_join"] != ""
+

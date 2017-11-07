@@ -1,6 +1,6 @@
 ---
 - name: "Check if kubeadm installed or not"
-  command: "kubectl version"
+  command: "kubeadm version"
   ignore_errors: true
   changed_when: false
   register: result_kubeadm_installed

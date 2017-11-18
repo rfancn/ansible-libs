@@ -1,0 +1,7 @@
+- name: configure_phpfpm sanity check
+  fail: msg="Required variables->SITE_NAME, CONTAINER missed"
+  when: SITE_NAME is not defined or CONTAINER is not defined
+
+- name: configure_phpfpm default routine
+  include: tasks/{{ ansible_os_family | lower }}/default.yaml
+  become: true

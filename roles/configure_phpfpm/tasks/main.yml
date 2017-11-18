@@ -1,4 +1,0 @@
-- include_vars: "{{ phpfpm_container }}.yml"
-
-- name: Load php-fpm distribution tasks
-  include: redhat/default.yml

@@ -1,0 +1,9 @@
+- name: install redhat7 service unit file
+  block:
+    - template: src=sslocal.service.j2 dest=/etc/systemd/system/sslocal.service mode=0644
+    - shell: systemctl daemon-reload && systemctl enable sslocal.service
+    - template: src=shadowsocks.json.j2 dest=/etc/shadowsocks.json
+    - service: name=sslocal state=restarted
+  when: ansible_distribution_major_version|int == 7
+  become: yes
+

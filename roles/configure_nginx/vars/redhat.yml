@@ -1,5 +1,0 @@
-nginx_log_dir: "/var/log/nginx/"
-nginx_access_log: "{{ nginx_log_dir }}{{ project_name }}-access.log"
-nginx_error_log:  "{{ nginx_log_dir }}{{ project_name }}-error.log"
-nginx_conf_d_dir: "/etc/nginx/conf.d/"
-nginx_conf_file: "{{ nginx_conf_d_dir }}{{ project_name }}-nginx.conf"

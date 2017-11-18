@@ -1,0 +1,9 @@
+- include_role: name=ensure_pip
+
+- name: pip install shadowsocks client
+  pip: name=shadowsocks state=latest
+  become: yes
+
+- name: Install distribution related initscripts
+  include: tasks/{{ ansible_os_family | lower }}/default.yaml
+  

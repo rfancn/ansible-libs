@@ -1,0 +1,6 @@
+- name: init_vps sanity check
+  fail: msg="Required variables->VPS_TOOLS_PATH"
+  when: VPS_TOOLS_PATH is not defined
+
+- name: distribution specific tasks
+  include: tasks/{{ ansible_os_family | lower }}/default.yaml

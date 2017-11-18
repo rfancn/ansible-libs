@@ -1,0 +1,25 @@
+- include_vars: "{{ ansible_os_family | lower }}.yaml"
+
+- name: install required php plugins
+  yum : name={{ item }} state=latest
+  with_items: '{{ package_php_extras }}'
+  become: yes
+
+- block:
+  - name: configure nginx
+    template: src=nginx.conf.j2 dest="{{ nginx_conf_dir }}/grav.conf" backup=yes
+  - name: configure phpfpm
+    template: src=php-fpm.conf.j2 dest="{{ phpfpm_conf_dir }}/www.conf" backup=yes
+  - name: enable and start nginx service
+    service: name=nginx enabled=yes state=restarted
+  - name: enable and start php-fpmd service
+    service: name=php-fpm enabled=yes state=restarted
+  - name: make sure nginx can access home dir
+    shell: setfacl -m user:nginx:x "{{ ansible_env.HOME }}"
+  - name: make sure php session dir can be accessed by nginx
+    shell: chown -R nginx:php-fpm "{{ phpfpm_session_dir }}"
+  become: yes
+
+
+
+

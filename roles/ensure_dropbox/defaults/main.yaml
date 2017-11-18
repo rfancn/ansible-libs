@@ -1,0 +1,3 @@
+dropbox_dir: "{{ BASE_DIR }}/dropbox"
+dropbox_user: ryan
+dropbox_group: ryan

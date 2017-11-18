@@ -1,7 +1,7 @@
 server {
 
-listen       {{ nginx_listen }};
-server_name  {{ nginx_server_name }};
+listen       {{ NGINX_LISTEN }};
+server_name  {{ NGINX_SERVER_NAME }};
 
 location = favicon.ico { access_log off; log_not_found off; }
 
@@ -18,6 +18,6 @@ root {{ nginx_root }};
 {% include "location_context.j2" %}
 {% endif %}
 
-{% block block_nginx_feature %}{% endblock %}
+{% block NGINX_FEATURE %}{% endblock %}
 
 }

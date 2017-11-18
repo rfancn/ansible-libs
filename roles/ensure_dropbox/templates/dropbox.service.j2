@@ -1,0 +1,14 @@
+[Unit]
+Description=Dropbox Service
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/python {{ BASE_DIR }}/bin/dropbox.py start
+ExecStop=/usr/bin/python {{ BASE_DIR }}/bin/dropbox.py stop
+User={{ dropbox_user }}
+Group={{ dropbox_group }}
+
+[Install]
+WantedBy=multi-user.target

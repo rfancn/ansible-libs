@@ -1,0 +1,17 @@
+- name: install redhat7 service unit file
+  block:
+    - template: src=shadowsocks.service.j2 dest=/etc/systemd/system/shadowsocks.service mode=0644
+    - shell: systemctl daemon-reload
+    - shell: systemctl enable shadowsocks.service
+    - shell: systemctl start shadowsocks
+  when: ansible_distribution_major_version|int == 7
+  become: yes
+
+- name: install redhat4,5,6 initscript file
+  block:
+    - template: src=shadowsocks.sysv.j2 dest=/etc/init.d/shadowsocks mode=0644
+    - shell: chkconfig --level 345 shadowsocks on
+    - shell: service shadowsocks start 
+  when: ansible_distribution_major_version|int < 7
+  become: yes
+

@@ -1,3 +1,18 @@
 ---
-- name: ius-release distribution specific tasks
-  include: "{{ ansible_distribution|lower }}/default.yaml"
+- name: ensure_ius_release sanity check
+  fail: msg="ius-release packages can not be installed on {{ ansible_distribution }}"
+  when: ansible_os_family|lower != "redhat"
+
+- name: Check if ius-release installed or not
+  command: yum list installed ius-release
+  register: result_ius_installed
+  ignore_errors: true
+
+- block:
+  - include_vars: "{{ansible_distribution|lower}}.yaml"
+  - name: Install ius-release package
+    package: name="{{ ius_package_url }}"
+    become: yes
+  when: result_ius_installed | failed
+
+

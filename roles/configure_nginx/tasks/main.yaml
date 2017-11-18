@@ -1,0 +1,17 @@
+---
+# VARIABLES:
+# Mandatory: SITE_NAME
+# Optional: NGINX_FEATURE, NGINX_LISTEN, NGINX_SERVER_NAME
+
+- name: configure_nginx sanity check
+  fail: msg="Required variables->SITE_NAME missed"
+  when: SITE_NAME is not defined
+
+- include_vars: "{{ ansible_os_family | lower }}.yaml"
+
+- block:
+  - name: Generate nginx configuration file
+    template: src={{ nginx_conf_template }} dest={{ nginx_conf_file }}
+  - name: Enable nginx service
+    service: name=nginx enabled=yes
+  become: true

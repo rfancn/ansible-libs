@@ -1,0 +1,8 @@
+- include_vars: "{{ PHP_VERSION }}.yaml"
+
+- include_role: name=ensure_epel_release
+
+- include_role: name=ensure_ius_release
+
+- name: Install specific php-fpm
+  package: name={{ phpfpm_package_name }}

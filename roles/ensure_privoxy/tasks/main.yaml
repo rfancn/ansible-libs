@@ -1,0 +1,23 @@
+- name: try get git version
+  shell: privoxy --version
+  register: result_privoxy_exist
+  ignore_errors: true
+
+- name: if failed to privoxy version, need install privoxy package
+  package: name=privoxy
+  when: result_privoxy_exist|failed
+  become: yes
+
+- name: configure to forward socks5 rquest to local port
+  lineinfile:
+    dest: /etc/privoxy/config
+    state: present
+    # regular express matched, then line will be replace with the same matched pattern
+    # otherwise, the line will be appended
+    regexp: "^forward-socks5"
+    line: "forward-socks5 / 127.0.0.1:1080 ."
+  become: yes
+
+- name: enable and start privoxy service
+  shell: systemctl daemon-reload && systemctl enable privoxy.service && systemctl start privoxy
+  become: yes

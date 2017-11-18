@@ -1,2 +1,0 @@
-- name: Load distribution related tasks
-  include: tasks/{{ ansible_os_family | lower }}/default.yml

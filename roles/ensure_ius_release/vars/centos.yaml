@@ -1,0 +1,1 @@
+ius_package_url: "https://centos{{ ansible_distribution_major_version }}.iuscommunity.org/ius-release.rpm"

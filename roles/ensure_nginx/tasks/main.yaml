@@ -1,0 +1,3 @@
+- name: ensure_nginx main
+  include: tasks/{{ ansible_os_family | lower }}/default.yaml
+  become: true

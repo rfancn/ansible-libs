@@ -1,0 +1,25 @@
+- include_role: name=ensure_nginx
+- include_role: name=ensure_phpfpm
+
+- name: make sure unzip utility is installed
+  package: name=unzip
+  become: yes
+
+- name: download and extract grav source
+  unarchive:
+    src: https://getgrav.org/download/core/grav/1.3.1
+    dest: "{{ ansible_env.HOME }}"
+    remote_src: yes
+
+- name: other distribution related tasks
+  include: tasks/{{ ansible_os_family | lower }}/default.yaml
+
+- name: try init grav
+  script: initgrav.sh "{{ BASE_DIR }}" "{{ ansible_env.HOME }}" "{{ grav_rootdir }}"
+
+- name: set grav permission
+  script: setperm.sh "{{ grav_rootdir }}"
+  become: yes
+
+- name: install grav backup cron job
+  cron: name="backup grav" minute="30" hour="6" job="cd {{ BASE_DIR }}/bin/gv_backup && sh backup.sh"

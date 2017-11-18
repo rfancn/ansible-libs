@@ -1,0 +1,14 @@
+#VARIABLES:
+#Optional: PHP_VERSION
+- name: php-fpm is installed or not
+  command: php-fpm -v
+  register: result_phpfpm_installed
+  ignore_errors: true
+
+- name: ensure_phpfpm main
+  include: tasks/{{ ansible_os_family | lower }}/default.yaml
+  become: true
+  when: result_phpfpm_installed | failed
+
+
+

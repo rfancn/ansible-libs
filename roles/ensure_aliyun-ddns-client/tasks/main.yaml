@@ -1,0 +1,22 @@
+# VARIABLES:
+# Mandatory: ACCESS_ID, ACCESS_KEY
+# Optional: ADC_INSTALL_DIR
+
+- name: ensure_aliyun_ddns_client sanity check
+  fail: msg="Required variables->ACCESS_ID, ACCESS_KEY"
+  when: ACCESS_ID is not defined or ACCESS_KEY is not defined
+
+- name: remove aliyun-ddns-client dir
+  file: state=absent path="{{ ADC_INSTALL_DIR }}"
+
+- name: clone or update aliyun-ddns-client from git repository
+  git: repo='https://github.com/rfancn/aliyun-ddns-client.git' dest="{{ ADC_INSTALL_DIR }}" clone=yes update=yes
+
+- name: install config file
+  template: src=ddns.conf.j2 dest=/etc/ddns.conf
+  become: yes
+
+- name: install cronjob
+  cron: name="aliyun-ddns-client cronjob" minute="*/{{ cron_minute_interval }}" job="cd {{ ADC_INSTALL_DIR }} && /usr/bin/python ddns.py"
+
+

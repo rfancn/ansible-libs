@@ -3,7 +3,7 @@
 {% block block_nginx_feature %}
 location / {
   include uwsgi_params;
-  uwsgi_pass unix:/run/nginx/{{ project_name }}.sock;
+  uwsgi_pass unix:/run/nginx/{{ SITE_NAME }}.sock;
 }
 {% endblock %}
 

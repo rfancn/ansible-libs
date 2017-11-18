@@ -1,0 +1,3 @@
+target_version: 2.7
+ss_dir: "{{ BASE_DIR }}/shadowsocks"
+ss_server_host: 

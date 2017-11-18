@@ -1,0 +1,14 @@
+[Unit]
+Description=Shadowsocks Client Service
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=forking
+WorkingDirectory={{ ss_dir }}
+ExecStart=/usr/bin/sslocal -c /etc/shadowsocks.json -d start
+ExecStop=/usr/bin/sslocal -d stop
+
+[Install]
+WantedBy=multi-user.target
+

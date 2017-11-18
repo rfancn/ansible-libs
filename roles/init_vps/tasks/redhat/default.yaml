@@ -1,0 +1,6 @@
+- name: add mytools binary dir to bash_profile
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.bash_profile"
+    state: present
+    insertafter: "^PATH="
+    line: "PATH=$PATH:{{ VPS_TOOLS_PATH }}"

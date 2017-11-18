@@ -1,0 +1,2 @@
+ADC_INSTALL_DIR: "{{ ansible_env.HOME }}/aliyun-ddns-client"
+cron_minute_interval: 2

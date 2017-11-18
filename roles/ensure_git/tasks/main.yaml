@@ -1,0 +1,8 @@
+- name: try get git version
+  shell: git --version
+  register: result_git_exist
+  ignore_errors: true
+- name: if failed to git version, need install git package
+  package: name=git
+  when: result_git_exist|failed
+  become: yes

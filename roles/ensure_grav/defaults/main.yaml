@@ -1,0 +1,5 @@
+nginx_listen_port: 80
+nginx_server_name: "guanxigo.com www.guanxigo.com"
+
+grav_rootdir: "{{ ansible_env.HOME }}/grav"
+php_version: 5.6

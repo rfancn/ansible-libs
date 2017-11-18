@@ -1,0 +1,32 @@
+- include_role: name=ensure_ss-local
+- name: check sslocal service started or not
+  shell: systemctl status sslocal
+  register: service_sslocal_started
+  ignore_errors: true
+- name: fail if sslocal service is not started
+  fail: msg="sslocal service need to be started firstly"
+  when: service_sslocal_started | failed
+
+
+- include_role: name=ensure_privoxy
+- name: check privoxy service started or not
+  shell: systemctl status privoxy
+  register: service_privoxy_started
+  ignore_errors: true
+- name: fail if privoxy service is not started
+  fail: msg="privoxy service need to be started firstly"
+  when: service_privoxy_started | failed
+
+- name: download and extract dropbox
+  script: getdropbox.sh "{{ ansible_env.HOME }}"
+  
+- name: install dropbox service unit file
+  block:
+    - template: src=dropbox.service.j2 dest=/etc/systemd/system/dropbox.service mode=0644
+    - shell: systemctl daemon-reload && systemctl enable dropbox.service
+  when: ansible_distribution_major_version|int == 7
+  become: yes
+
+
+
+

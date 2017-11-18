@@ -9,7 +9,7 @@
 
 - block:
   - include_vars: "{{ target_version }}.yml"
-  - include_role: name=ensure_epel
+  - include_role: name=ensure_epel_release
   - include_role: name=ensure_ius_release
 
   - name: Install specific PHP

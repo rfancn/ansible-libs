@@ -1,0 +1,3 @@
+- name: ensure_dropbox sanity check
+  fail: msg="Required variables->BASE_PATH"
+  when: VPS_TOOLS_PATH is not defined

@@ -2,7 +2,7 @@
   fail: msg="Required variables->SITE_NAME"
   when: SITE_NAME is not defined
 
-- include_role: name=configure_phpfpm container=nginx
+- include_role: name=configure_phpfpm CONTAINER=nginx
 
 - include_role: name=configure_nginx NGINX_FEATURE=phpfpm
 

@@ -1,6 +1,6 @@
 - name: Check required variables
-  fail: msg="Required variables->project_name, project_home missed"
-  when: project_name is not defined or project_home is not defined
+  fail: msg="Required variables->SITE_NAME, SITE_ROOT missed"
+  when: SITE_NAME is not defined or SITE_ROOT is not defined
   tags: configure_uwsgi
 
 # construct a uwsgi platform dir for invoking different tasks and variables under specific dir

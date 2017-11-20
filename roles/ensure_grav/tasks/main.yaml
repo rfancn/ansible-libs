@@ -2,9 +2,14 @@
   fail: msg="Required variables->SITE_NAME"
   when: SITE_NAME is not defined
 
-- include_role: name=configure_phpfpm CONTAINER=nginx
+- name: configure phpfpm for grav
+  include_role: name=configure_phpfpm
+  vars:
+    CONTAINER: nginx
 
-- include_role: name=configure_nginx NGINX_FEATURE=phpfpm
+- include_role: name=configure_nginx
+  vars:
+    NGINX_FEATURE: phpfpm
 
 - name: main
   include: "tasks/{{ ansible_os_family | lower }}/default.yaml"

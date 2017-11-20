@@ -15,14 +15,17 @@
   with_items: '{{ package_php_extras }}'
 
 - name: try init grav
-  script: initgrav.sh "{{ BASE_DIR }}" "{{ ansible_env.HOME }}" "{{ grav_rootdir }}"
+  script: initgrav.sh "{{ BASE_DIR }}" "{{ ansible_env.HOME }}" "{{ SITE_ROOT }}"
 
 - name: set grav permission
-  script: setperm.sh "{{ grav_rootdir }}"
+  script: setperm.sh "{{ SITE_ROOT }}" "{{ ansible_user_id }}"
   become: yes
 
 - name: install grav backup cron job
   cron: name="backup grav" minute="30" hour="6" job="cd {{ BASE_DIR }}/bin/gv_backup && sh backup.sh"
+  when: ansible_virtualization_type not in [ 'lxc', 'docker' ]
+
+
 
 
 

@@ -1,4 +1,6 @@
-- include_vars: "{{ ansible_os_family | lower }}.yaml"
+- name: sanity check
+  fail: msg="Required variables->SITE_NAME, SITE_ROOT missed"
+  when: SITE_NAME is not defined or SITE_ROOT is not defined
 
 - name: make sure unzip utility is installed
   package: name=unzip
@@ -6,13 +8,13 @@
 
 - name: download and extract grav source
   unarchive:
-    src: "https://getgrav.org/download/core/grav/{{ grav_version }}"
+    src: https://getgrav.org/download/core/grav/1.3.1
     dest: "{{ ansible_env.HOME }}"
     remote_src: yes
 
-- name: install required php plugins
-  yum : name={{ item }} state=latest
-  with_items: '{{ package_php_extras }}'
+- name: other distribution related tasks
+  include: tasks/{{ ansible_os_family | lower }}/default.yaml
+  become: yes
 
 - name: try init grav
   script: initgrav.sh "{{ BASE_DIR }}" "{{ ansible_env.HOME }}" "{{ grav_rootdir }}"
@@ -23,9 +25,3 @@
 
 - name: install grav backup cron job
   cron: name="backup grav" minute="30" hour="6" job="cd {{ BASE_DIR }}/bin/gv_backup && sh backup.sh"
-
-
-
-
-
-

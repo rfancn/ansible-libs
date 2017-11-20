@@ -1,12 +1,3 @@
-nginx_conf_dir: /etc/nginx/conf.d
-nginx_log_basedir: /var/log/nginx
-nginx_access_log: "{{ nginx_log_basedir }}/grav-access.log"
-nginx_error_log: "{{ nginx_log_basedir }}/grav-error.log"
-
-phpfpm_conf_dir: /etc/php-fpm.d
-phpfpm_unixsock: /run/php-fpm/grav.sock
-phpfpm_session_dir: /var/lib/php-fpm/session
-
 package_php_extras:
   - php56u-gd
   - php56u-mbstring

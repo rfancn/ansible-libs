@@ -1,0 +1,6 @@
+---
+dependencies:
+  - role: ensure_php
+  - role: ensure_nginx
+  - role: ensure_phpfpm
+

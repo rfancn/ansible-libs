@@ -9,7 +9,7 @@
   ignore_errors: true
 
 - name: Install virtualenv
-  include: default.yml
+  include: default.yaml
   when: result_virtualenv_is_installed | failed
 
 

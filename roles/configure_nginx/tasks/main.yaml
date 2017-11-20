@@ -3,15 +3,23 @@
 # Mandatory: SITE_NAME
 # Optional: NGINX_FEATURE, NGINX_LISTEN, NGINX_SERVER_NAME
 
-- name: configure_nginx sanity check
-  fail: msg="Required variables->SITE_NAME missed"
-  when: SITE_NAME is not defined
+- name: sanity check
+  fail: msg="Required variables->SITE_NAME, SITE_ROOT missed"
+  when: SITE_NAME is not defined or SITE_ROOT is not defined
 
 - include_vars: "{{ ansible_os_family | lower }}.yaml"
 
 - block:
-  - name: Generate nginx configuration file
+  - name: dissable selinux tempoararily
+    command: setenforce 0
+    ignore_errors: true
+  - name: disable selinux permanently
+    selinux: state="disabled"
+  - name: generate configuration
     template: src={{ nginx_conf_template }} dest={{ nginx_conf_file }}
-  - name: Enable nginx service
-    service: name=nginx enabled=yes
+  - name: make sure have exec privilege for parent dir of nginx root
+    script: setacl.sh "{{ SITE_ROOT }}"
+  - name: enable and restart nginx service
+    service: name=nginx enabled=yes state=restarted
+    when: ansible_virtualization_type not in [ 'lxc', 'docker' ]
   become: true

@@ -1,6 +1,5 @@
 ---
 dependencies:
-  - {role: ensure_php, PHP_VERSION: PHP_VERSION}
   - role: ensure_epel_release
     when: ansible_os_family | lower == "redhat"
   - role: ensure_ius_release

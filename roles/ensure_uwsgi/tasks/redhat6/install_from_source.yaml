@@ -1,5 +1,5 @@
 ---
-- include_vars: "{{ uwsgi_platform_dirname }}/python{{ target_version }}.yml"
+- include_vars: "{{ uwsgi_platform_dirname }}/python{{ target_version }}.yaml"
 
 # Prebuild
 - block:

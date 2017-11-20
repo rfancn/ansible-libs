@@ -5,7 +5,7 @@ My customized ansible scripts which help to manage or deploy something
 
     $ ansible-playbook -vvvi hosts playbooks/[playbook-filename]
     e,g:
-    $ ansible-playbook -vvvi hosts playbooks/initenv.yml
+    $ ansible-playbook -vvvi hosts playbooks/initenv.yaml
 
 ## playbook: initenv(mostly works for VPS initialzation)
 Initialize a minimal Linux env for production ready env

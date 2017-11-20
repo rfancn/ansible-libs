@@ -1,0 +1,4 @@
+---
+dependencies:
+  - role: ensure_epel_release
+    when: ansible_os_family | lower == "redhat"

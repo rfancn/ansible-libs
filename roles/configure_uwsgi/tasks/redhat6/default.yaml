@@ -1,6 +1,6 @@
 ---
 # configurate uwsgi fro Redhat6
-- include_vars: "{{ uwsgi_platform_dirname }}/default.yml"
+- include_vars: "{{ uwsgi_platform_dirname }}/default.yaml"
 
 # prepare uwsgi running env
 - block:

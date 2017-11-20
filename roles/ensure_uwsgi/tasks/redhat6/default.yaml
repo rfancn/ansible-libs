@@ -1,5 +1,5 @@
 ---
-- include_vars: "{{ uwsgi_platform_dirname }}/common.yml"
+- include_vars: "{{ uwsgi_platform_dirname }}/common.yaml"
 
 - name: Check uwsgi binary exist or not
   shell: "{{ uwsgi_prog }} --version"
@@ -10,5 +10,5 @@
 # if we can find python version info here,
 # then we need rebuild it
 - name: Load install tasks
-  include: install_from_source.yml
+  include: install_from_source.yaml
   when: result_uwsgi_is_installed | failed

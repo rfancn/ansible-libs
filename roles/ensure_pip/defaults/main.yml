@@ -1,4 +1,0 @@
-pip_executable: pip{{target_version}}
-python_executable: python{{target_version}}
-
-pip_source_url: https://bootstrap.pypa.io/get-pip.py

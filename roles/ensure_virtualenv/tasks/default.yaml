@@ -10,4 +10,4 @@
   when: pip_version_info.stdout.find("{{ target_version }}") == -1
 
 - name: Load virtualenv install tasks
-  include: "{{ virtualenv_install_method }}.yml"
+  include: "{{ virtualenv_install_method }}.yaml"

@@ -14,4 +14,6 @@
   file: dest=/var/lib/php-fpm/session group={{ phpfpm_group }}
 - name: Change php-fpm wsdlcache dir to {{ phpfpm_group }}
   file: dest=/var/lib/php-fpm/wsdlcache group={{ phpfpm_group }}
-
+- name: enable and restart php-fpm service
+  service: name=php-fpm enabled=yes state=restarted
+  when: ansible_virtualization_type not in [ 'lxc', 'docker' ]

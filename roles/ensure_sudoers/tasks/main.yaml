@@ -3,4 +3,4 @@
   when: privileged_user is not defined
 
 - name: Enable {{ privileged_user }} as suders
-  include: redhat/default.yml
+  include: redhat/default.yaml

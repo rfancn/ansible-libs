@@ -1,5 +1,5 @@
 ---
-- name: ensure_epel_release sanity check
+- name: sanity check
   fail: msg="epel-release packages can not be installed on {{ ansible_distribution }}"
   when: ansible_os_family|lower != "redhat"
 
@@ -10,7 +10,7 @@
 
 - name: Install epel-release package
   package: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
-  when: result_epel_installed | failed
+  when: result_epel_installed|failed
   become: yes
 
 

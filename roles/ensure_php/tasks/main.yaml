@@ -1,0 +1,16 @@
+- name: check php installed or not
+  command: php -v
+  register: result_php_installed
+  ignore_errors: true
+
+- block:
+  - debug: msg="Install PHP {{ PHP_TARGET_VERSION }}"
+
+  - include_vars: "{{ PHP_TARGET_VERSION }}.yaml"
+
+  - name: install specific PHP version
+    yum: name={{ item }} state=latest
+    with_items: "{{ php_package_names }}"
+    become: yes
+
+  when: (result_php_installed | failed) or (result_php_installed.stdout.find("{{ PHP_TARGET_VERSION }}") == -1)

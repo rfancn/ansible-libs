@@ -1,4 +1,4 @@
-- include_vars: "{{ PHP_VERSION }}.yaml"
+- include_vars: "{{ PHP_TARGET_VERSION }}.yaml"
 
 - include_role: name=ensure_epel_release
 

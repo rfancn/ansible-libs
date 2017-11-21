@@ -1,3 +1,4 @@
+SITE_ROOT: /usr/share/nginx/html
 NGINX_LISTEN: 80
 NGINX_FEATURE: standard
 

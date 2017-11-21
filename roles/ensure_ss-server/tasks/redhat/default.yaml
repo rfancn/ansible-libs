@@ -16,6 +16,7 @@
   when: ansible_distribution_major_version|int < 7
 
 - name: enable and start service
+  shell: systemctl daemon-reload
   service: name=shadowsocks enabled=yes state=restarted
   when: ansible_virtualization_type not in [ 'lxc', 'docker' ]
 

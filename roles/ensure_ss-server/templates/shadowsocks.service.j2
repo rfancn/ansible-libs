@@ -6,7 +6,7 @@ After=network.target network-online.target
 [Service]
 Type=forking
 WorkingDirectory={{ SS_ROOT }}
-ExecStart=/usr/bin/ssserver --user nobody --fast-open --workers 2 -c /etc/shadowsocks.json -d start
+ExecStart=/usr/bin/ssserver --user nobody --fast-open --workers 2 -c shadowsocks.json -d start
 ExecStop=/usr/bin/ssserver -d stop
 
 [Install]

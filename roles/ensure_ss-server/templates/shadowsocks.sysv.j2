@@ -12,13 +12,11 @@
 SHADOWSOCKS_HOME = {{ ss_dir }}
 
 start(){
-    # make sure /etc/shadowsocks.json generated
-    cd $SHADOWSOCKS_HOME && /usr/bin/python create_config.py
-    ssserver -c /etc/shadowsocks.json -d start
+    ssserver -c {{ SS_ROOT }}/shadowsocks.json -d start
 }
 
 stop(){
-    ssserver -c /etc/shadowsocks.json -d stop
+    ssserver -c {{ SS_ROOT }}/shadowsocks.json -d stop
 }
 
 case "$1" in

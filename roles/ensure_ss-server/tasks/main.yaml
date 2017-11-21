@@ -1,9 +1,4 @@
-- include_role: name=ensure_pip
-
-- name: pip install shadowsocks server
-  shell: pip install shadowsocks
-  become: yes
-
-- name: Install distribution related initscripts
+- name: main
   include: tasks/{{ ansible_os_family | lower }}/default.yaml
+  become: true
   

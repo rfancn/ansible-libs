@@ -1,4 +1,6 @@
-pip_executable: pip{{PHP_TARGET_VERSION}}
-python_executable: python{{PHP_TARGET_VERSION}}
+PIP_TARGET_VERSION: 2.7
+
+pip_executable: pip{{PIP_TARGET_VERSION}}
+python_executable: python{{PIP_TARGET_VERSION}}
 
 pip_source_url: https://bootstrap.pypa.io/get-pip.py

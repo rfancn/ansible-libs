@@ -1,7 +1,7 @@
 ---
 - name: ensure_pip sanity check
-  fail: msg="Required variables->PHP_TARGET_VERSION missed"
-  when: PHP_TARGET_VERSION is not defined
+  fail: msg="Required variables->PIP_TARGET_VERSION missed"
+  when: PIP_TARGET_VERSION is not defined
 
 - name: Check specfic verion of pip exist or not
   command: "{{ pip_executable }} -V"

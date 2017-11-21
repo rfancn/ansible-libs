@@ -2,7 +2,7 @@
   shell: pip install shadowsocks
 
 - name: make shadowsocks root dir exist
-  file: path="{{ SS_ROOT }}" state=directory owner="{{ ansible_user_id }}"
+  file: path="{{ SS_ROOT }}" state=directory
 
 - name: install shadowsocks server config
   template: src=shadowsocks.json.j2 dest="{{ SS_ROOT }}/shadowsocks.json"

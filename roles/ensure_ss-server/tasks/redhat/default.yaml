@@ -7,10 +7,11 @@
 - name: install shadowsocks server config
   template: src=shadowsocks.json.j2 dest="{{ SS_ROOT }}/shadowsocks.json"
 
-- name: install systemd service script
-  block:
+- block:
+  - name: install systemd service script
     template: src=shadowsocks.service.j2 dest=/etc/systemd/system/shadowsocks.service mode=0644
-     shell: systemctl daemon-reload
+  - name: systemd reload daemon
+    shell: systemctl daemon-reload
   when: ansible_distribution_major_version|int == 7
 
 - name: install sysv5 service script

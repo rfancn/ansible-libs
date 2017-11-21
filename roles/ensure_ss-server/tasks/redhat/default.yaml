@@ -2,21 +2,21 @@
   shell: pip install shadowsocks
 
 - name: make shadowsocks root dir exist
-  file: path="{{ SS_ROOT }}" state=directory
+  file: path="{{ SS_ROOT }}" state=directory owner="{{ ansible_user_id }}" group="{{ ansible_group_id }}"
 
 - name: install shadowsocks server config
-  template: src=shadowsocks.json.j2 dest="{{ SS_ROOT }}/shadowsocks.json" force=yes
+  template: src=shadowsocks.json.j2 dest="{{ SS_ROOT }}/shadowsocks.json"
 
 - name: install systemd service script
-  template: src=shadowsocks.service.j2 dest=/etc/systemd/system/shadowsocks.service force=yes mode=0644
+  template: src=shadowsocks.service.j2 dest=/etc/systemd/system/shadowsocks.service mode=0644
+  shell: systemctl daemon-reload
   when: ansible_distribution_major_version|int == 7
 
 - name: install sysv5 service script
-  template: src=shadowsocks.sysv.j2 dest=/etc/init.d/shadowsocks force=yes mode=0644
+  template: src=shadowsocks.sysv.j2 dest=/etc/init.d/shadowsocks mode=0644
   when: ansible_distribution_major_version|int < 7
 
 - name: enable and start service
-  shell: systemctl daemon-reload
   service: name=shadowsocks enabled=yes state=restarted
   when: ansible_virtualization_type not in [ 'lxc', 'docker' ]
 

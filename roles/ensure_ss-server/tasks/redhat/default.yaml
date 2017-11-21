@@ -1,15 +1,18 @@
 - name: install shadowsocks server
   shell: pip install shadowsocks
 
+- name: make shadowsocks root dir exist
+  file: path="{{ SS_ROOT }}" state=directory
+
 - name: install shadowsocks server config
-  template: src=shadowsocks.json.j2 dest="{{ SS_ROOT }}/shadowsocks.json"
+  template: src=shadowsocks.json.j2 dest="{{ SS_ROOT }}/shadowsocks.json" force=yes
 
 - name: install systemd service script
-  template: src=shadowsocks.service.j2 dest=/etc/systemd/system/shadowsocks.service mode=0644
+  template: src=shadowsocks.service.j2 dest=/etc/systemd/system/shadowsocks.service force=yes mode=0644
   when: ansible_distribution_major_version|int == 7
 
 - name: install sysv5 service script
-  template: src=shadowsocks.sysv.j2 dest=/etc/init.d/shadowsocks mode=0644
+  template: src=shadowsocks.sysv.j2 dest=/etc/init.d/shadowsocks force=yes mode=0644
   when: ansible_distribution_major_version|int < 7
 
 - name: enable and start service

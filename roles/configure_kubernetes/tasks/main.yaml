@@ -6,8 +6,8 @@
   register: result_kubeadm_installed
 
 - block:
-  - name: Configure kubernetes
+  - name: reset kubernetes setup
     include: "reset.yaml"
-  - name: Load corresponding yaml based on role
+  - name: execute kubernete role
     include: "{{ kube_node_role }}.yaml"
   when: result_kubeadm_installed|succeeded

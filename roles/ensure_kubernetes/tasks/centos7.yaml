@@ -1,44 +1,18 @@
----
 - include_vars: "centos7.yaml"
 
-- name : Stop firewalld service
-  service: name="firewalld" state="stopped" enabled="no"
+- name: Install yum-utils
+  yum: name=yum-utils
+- name: Make sure there no pending yum transaction
+  command: yum-complete-transaction --cleanup-only
+- name: Install kubernetes repository
+  template: src={{ kube_repo_template }} dest={{ kube_repo_file }}
+- name: Yum install packages
+  yum : name={{ item }} state=latest
+  with_items: '{{ kube_packages }}'
 
-- name: Disable selinux
-  selinux:  state="disabled"
-
-- name: Enable ip_forward
-  sysctl: name="net.bridge.bridge-nf-call-iptables" value=1 sysctl_set="yes" state="present" reload="yes"
-
-# disable swap persistently
-- block:
-  - name: swap - remove current swaps from fstab
-    replace:
-      dest: /etc/fstab
-      regexp: '(^(?!#).*\s+swap\s+swap)'
-      replace: '#\1'
-  - name: swap - disable swap
-    command: swapoff --all
-  when: ansible_swaptotal_mb|int != 0
-
-# install kubernete packages
-- block:
-  - name: Install yum-utils
-    yum: name=yum-utils
-  - name: Make sure there no pending yum transaction
-    command: yum-complete-transaction --cleanup-only 
-  - name: Install kubernetes repository
-    template: src={{ kube_repo_template }} dest={{ kube_repo_file }}
-  - name: Yum install packages
-    yum : name={{ item }} state=latest
-    with_items: '{{ kube_packages }}'
-  - name: Enable and start docker service
-    service: name=docker enabled=yes state=started
-  # Issue: https://stackoverflow.com/questions/46726216/kubelet-fails-to-get-cgroup-stats-for-docker-and-kubelet-services
-  - name: Patch kubelet systemd start script for above issue
-    lineinfile:
-      dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-      regexp: '^Environment="KUBELET_CGROUP_ARGS='
-      line: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd --runtime-cgroups=/systemd/system.slice --kubelet-cgroups=/systemd/system.slice"
-  - name: Enable and start kubelet service
-    service: name=kubelet enabled=yes state=started
+# Issue: https://stackoverflow.com/questions/46726216/kubelet-fails-to-get-cgroup-stats-for-docker-and-kubelet-services
+- name: Patch kubelet systemd start script for above issue
+  lineinfile:
+    dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    regexp: '^Environment="KUBELET_CGROUP_ARGS='
+    line: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd --runtime-cgroups=/systemd/system.slice --kubelet-cgroups=/systemd/system.slice"

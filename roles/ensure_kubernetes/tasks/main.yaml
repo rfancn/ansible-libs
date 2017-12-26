@@ -5,6 +5,11 @@
   changed_when: false
   register: result_kube_installed
 
-- name: execute OS specific operations
-  include: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
+- block:
+  - name: setup kubernetes env
+    include: "env.yaml"
+  - name: install kubernetes related packages
+    include: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
+  - name: enable kubernetes related services
+    include: "service.yaml"
   when: result_kube_installed|failed

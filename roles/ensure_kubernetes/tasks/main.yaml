@@ -8,8 +8,11 @@
 - block:
   - name: setup kubernetes env
     include: "env.yaml"
+    tags: ensure_init_env
   - name: install kubernetes related packages
     include: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
+    tags: ensure_intall_pkgs
   - name: enable kubernetes related services
     include: "service.yaml"
+    tags: ensure_enable_services
   when: result_kube_installed|failed

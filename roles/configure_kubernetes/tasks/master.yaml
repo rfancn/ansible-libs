@@ -1,6 +1,6 @@
 # init master node
 - name: init main master node
-  command: kubeadm init --pod-network-cidr=10.244.0.0/16 --kubernetes_version="{{ kubernetes_version }}"
+  command: kubeadm init --pod-network-cidr=10.244.0.0/16 --kubernetes_version="{{ kube_version }}"
   register: result_master_init
 
 # Init home config dir

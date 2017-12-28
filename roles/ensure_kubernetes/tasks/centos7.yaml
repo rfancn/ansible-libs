@@ -10,6 +10,10 @@
   yum : name={{ item }} state=latest
   with_items: '{{ kube_packages }}'
 
+# Issue: accelerate docker hub
+- name: Patch docker daemon to accellerate pull/push for docker hub
+  template: src=docker_daemon.json dest=/etc/docker/daemon.json
+
 # Issue: https://stackoverflow.com/questions/46726216/kubelet-fails-to-get-cgroup-stats-for-docker-and-kubelet-services
 - name: Patch kubelet systemd start script for above issue
   lineinfile:

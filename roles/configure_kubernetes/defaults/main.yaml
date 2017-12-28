@@ -1,8 +1,24 @@
 ---
 kube_version: v1.7.11
+image_etcd_version: 3.0.17
+image_pause_version: 3.0
+image_dns_version: 1.14.4
+
 kube_script_join_node: node_join_script 
 kube_script_join_master_member: master_member_join_script
 
 kube_group_master: master
 kube_group_master_member: master_member
 kube_group_node: node
+
+kube_images:
+  - kube-apiserver-amd64:{{ kube_version }}
+  - kube-controller-manager-amd64:{{ kube_version }}
+  - kube-scheduler-amd64:{{ kube_version }}
+  - kube-proxy-amd64:{{ kube_version }}
+  - etcd-amd64:{{ image_etcd_version }}
+  - pause-amd64:{{ image_pause_version }}
+  - k8s-dns-sidecar-amd64:{{ image_dns_version }}
+  - k8s-dns-kube-dns-amd64:{{ image_dns_version }}
+  - k8s-dns-dnsmasq-nanny-amd64:{{ image_dns_version }}
+

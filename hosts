@@ -1,2 +1,3 @@
 [all]
 localhost:22 ansible_connection=local
+

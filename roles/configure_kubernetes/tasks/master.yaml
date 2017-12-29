@@ -29,8 +29,8 @@
   shell: kubectl -n kube-system get pods | tail -n +2| awk '$3!="Running"{print $0}'
   register: result_pods_not_ready
   until: (result_pods_not_ready.stdout == "") and (result_pods_not_ready.rc == 0)
-  retries: 30
-  delay: 10
+  retries: 90
+  delay: 20
   ignore_errors: yes
 #- name: Set kube_command_mm_join variable for future reference
 #  set_fact: kube_command_mm_join={{ result_master_init.stdout|regex_search('kubeadm join --master --token .*') }}

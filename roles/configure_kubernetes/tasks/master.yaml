@@ -1,8 +1,11 @@
+- name: reset kubernetes
+  include: "reset.yaml"
+
 # init master node - name: Pull docker core images
 - name: Pull docker images 
-  shell: docker pull "mirrorgooglecontainers/{{ item }}" && \
-         docker tag docker.io/mirrorgooglecontainers/{{item}} gcr.io/google_containers/{{item}} && \
-         docker rmi docker.io/mirrorgooglecontainers/{{item}}
+  shell:  docker pull "mirrorgooglecontainers/{{ item }}" && \
+          docker tag docker.io/mirrorgooglecontainers/{{item}} gcr.io/google_containers/{{item}} && \
+          docker rmi docker.io/mirrorgooglecontainers/{{item}}
   with_items: "{{ kube_images }}" 
 
 - name: init main master node
@@ -12,16 +15,45 @@
 # Init home config dir
 - name: Setup master environment
   shell:  mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
 - name: restart kubelet service to reload new cert if nessary
   service: name=kubelet state=restarted
 
 - name: apply network policy
-  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml
 
-- name: Set kube_command_node_join variable for future reference
-  set_fact: kube_command_node_join={{ result_master_init.stdout|regex_search('kubeadm join --token .*') }}
+#- name: Set kube_command_node_join variable for future reference
+#  set_fact: kube_command_node_join={{ result_master_init.stdout|regex_search('kubeadm join --token .*') }}
 
-- name: Set kube_command_mm_join variable for future reference
-  set_fact: kube_command_mm_join={{ result_master_init.stdout|regex_search('kubeadm join --master --token .*') }}
-  #currently don't support master HA
-  ignore_errors: true
+- name: Loop until all kube system pods are ready
+  shell: kubectl -n kube-system get pods | tail -n +2| awk '$3!="Running"{print $0}'
+  register: result_pods_not_ready
+  until: (result_pods_not_ready.stdout == "") and (result_pods_not_ready.rc == 0)
+  retries: 30
+  delay: 10
+  ignore_errors: yes
+#- name: Set kube_command_mm_join variable for future reference
+#  set_fact: kube_command_mm_join={{ result_master_init.stdout|regex_search('kubeadm join --master --token .*') }}
+#  #currently don't support master HA
+#  ignore_errors: true
+
+- block:
+  - name: Get kube master ip
+    shell: kubectl cluster-info | head -1 | grep -oE "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"
+    register: result_master_ip
+  - name: Set kube master ip for future reference
+    set_fact: kube_master_ip={{ result_master_ip.stdout }}
+
+- block:
+  - name: Get kube master port
+    shell: kubectl cluster-info | head -1 | grep -oE ':[0-9]+' | cut -f2 -d":"
+    register: result_master_port
+  - name: Set kube master port for future reference
+    set_fact: kube_master_port={{ result_master_port.stdout }}
+
+- block:
+  - name: Get kube token
+    shell: kubeadm token list | awk 'NR==2{print $1}'
+    register: result_token
+  - name: Set kube token for future reference
+    set_fact: kube_token={{ result_token.stdout }}

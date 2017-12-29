@@ -1,13 +1,6 @@
 ---
-- name: "Check if kubeadm installed or not"
+- name: "Make sure kubeadm is installed"
   command: "kubeadm version"
-  ignore_errors: true
-  changed_when: false
-  register: result_kubeadm_installed
 
-- block:
-  - name: reset kubernetes setup
-    include: "reset.yaml"
-  - name: execute kubernete role
-    include: "{{ kube_node_role }}.yaml"
-  when: result_kubeadm_installed|succeeded
+- name: "Execute kubenetes role based job"
+  include: "{{ kube_node_role }}.yaml"

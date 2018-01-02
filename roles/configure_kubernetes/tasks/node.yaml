@@ -27,5 +27,5 @@
   when: ansible_default_ipv4.address == kube_master_ip
 
 - name: try join worker node
-  shell: kubeadm join {{ kube_token }} {{ kube_master_ip }}:{{ kube_master_port }}
+  shell: kubeadm join --token {{ kube_token }} {{ kube_master_ip }}:{{ kube_master_port }}
   when: ansible_default_ipv4.address != kube_master_ip

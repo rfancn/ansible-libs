@@ -1,3 +1,4 @@
+---
 - name: Enable and start docker service
   service: name=docker enabled=yes state=started
 - name: Enable and start kubelet service

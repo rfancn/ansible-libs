@@ -6,10 +6,11 @@
   register: result_kube_installed
 
 - block:
-  - name: setup kubernetes env
+  - name: Initialize kubernetes env
     include: "env.yaml"
-  - name: install kubernetes related packages
+  - name: Execute platform specific jobs
     include: "{{ ansible_distribution|lower }}{{ ansible_distribution_major_version }}.yaml"
-  - name: enable kubernetes related services
+  - name: Enable kubernetes related services
     include: "service.yaml"
-  when: result_kube_installed|failed
+  when: result_kube_installed | failed
+

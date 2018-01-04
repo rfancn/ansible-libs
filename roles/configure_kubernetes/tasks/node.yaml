@@ -1,5 +1,31 @@
 # For normal nodes
- - name: join node
-   command: '{{ hostvars[groups["master"][0]]["kube_command_node_join"] }}'
-   when: hostvars[groups["master"][0]]["kube_command_node_join"] != ""
-   #when: "'{{ kube_group_node }}' in group_names"
+
+# if we cannot get kube_master_ip directly,
+# check if we can get it previous task result
+- name: Try get master node ip
+  set_fact: kube_master_ip='{{ hostvars[groups["master"][0]]["kube_master_ip"] }}'
+  when: kube_master_ip is not defined
+
+- name: Try get master node port
+  set_fact: kube_master_port='{{ hostvars[groups["master"][0]]["kube_master_port"] }}'
+  when: kube_master_port is not defined
+
+- name: Try get master node ip
+  set_fact: kube_token='{{ hostvars[groups["master"][0]]["kube_token"] }}'
+  when: kube_token is not defined
+
+- debug:
+    msg: "{{ kube_master_ip }}-{{ kube_master_port }}-{{ kube_token }}-{{ansible_default_ipv4.address}}"
+
+#- name: join node
+#  command: '{{ hostvars[groups["master"][0]]["kube_command_node_join"] }}'
+#  when: hostvars[groups["master"][0]]["kube_command_node_join"] != ""
+#  #when: "'{{ kube_group_node }}' in group_names"
+- name: remove master isolation if master node also works as worker node
+  shell: kubectl taint nodes --all node-role.kubernetes.io/master-
+  ignore_errors: yes
+  when: ansible_default_ipv4.address == kube_master_ip
+
+- name: try join worker node
+  shell: kubeadm join --token {{ kube_token }} {{ kube_master_ip }}:{{ kube_master_port }}
+  when: ansible_default_ipv4.address != kube_master_ip

@@ -6,7 +6,7 @@
   shell:  docker pull "mirrorgooglecontainers/{{ item }}" && \
           docker tag docker.io/mirrorgooglecontainers/{{item}} gcr.io/google_containers/{{item}} && \
           docker rmi docker.io/mirrorgooglecontainers/{{item}}
-  with_items: "{{ kube_images }}" 
+  with_items: "{{ kube_master_images }}"
 
 - name: init main master node
   command: kubeadm init --pod-network-cidr=10.244.0.0/16 --kubernetes_version={{ kube_version }}

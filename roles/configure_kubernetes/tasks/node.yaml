@@ -21,11 +21,20 @@
 #  command: '{{ hostvars[groups["master"][0]]["kube_command_node_join"] }}'
 #  when: hostvars[groups["master"][0]]["kube_command_node_join"] != ""
 #  #when: "'{{ kube_group_node }}' in group_names"
-- name: remove master isolation if master node also works as worker node
+- name: Remove master isolation if master node also works as worker node
   shell: kubectl taint nodes --all node-role.kubernetes.io/master-
   ignore_errors: yes
   when: ansible_default_ipv4.address == kube_master_ip
 
-- name: try join worker node
-  shell: kubeadm join --token {{ kube_token }} {{ kube_master_ip }}:{{ kube_master_port }}
+- block:
+  - name: Pull google container docker images
+    shell:  docker pull "mirrorgooglecontainers/{{ item }}" && \
+            docker tag docker.io/mirrorgooglecontainers/{{item}} gcr.io/google_containers/{{item}} && \
+            docker rmi docker.io/mirrorgooglecontainers/{{item}}
+     with_items: "{{ kube_node_images }}"
+  - name: Pull quay.io docker images
+    shell:  docker pull "quay.io/coreos/flannel:{{image_flannel_tag}}"
+  - name: try join worker node
+    shell: kubeadm join --token {{ kube_token }} {{ kube_master_ip }}:{{ kube_master_port }}
+
   when: ansible_default_ipv4.address != kube_master_ip

@@ -4,8 +4,8 @@
 # init master node - name: Pull docker core images
 - name: Pull docker images 
   shell:  docker pull "mirrorgooglecontainers/{{ item }}" && \
-          docker tag docker.io/mirrorgooglecontainers/{{item}} gcr.io/google_containers/{{item}} && \
-          docker rmi docker.io/mirrorgooglecontainers/{{item}}
+          docker tag "docker.io/mirrorgooglecontainers/{{item}}" "gcr.io/google_containers/{{item}}" && \
+          docker rmi "docker.io/mirrorgooglecontainers/{{item}}"
   with_items: "{{ kube_master_images }}"
 
 - name: Pull quay.io docker images

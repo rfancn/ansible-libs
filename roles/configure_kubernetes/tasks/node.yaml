@@ -3,19 +3,19 @@
 # if we cannot get kube_master_ip directly,
 # check if we can get it previous task result
 - name: Try get master node ip
-  set_fact: kube_master_ip='{{ hostvars[groups["master"][0]]["kube_master_ip"] }}'
+  set_fact: kube_master_ip={{ hostvars[groups["master"][0]]["kube_master_ip"] }}
   when: kube_master_ip is not defined
 
 - name: Try get master node port
-  set_fact: kube_master_port='{{ hostvars[groups["master"][0]]["kube_master_port"] }}'
+  set_fact: kube_master_port={{ hostvars[groups["master"][0]]["kube_master_port"] }}
   when: kube_master_port is not defined
 
 - name: Try get master node ip
-  set_fact: kube_token='{{ hostvars[groups["master"][0]]["kube_token"] }}'
+  set_fact: kube_token={{ hostvars[groups["master"][0]]["kube_token"] }}
   when: kube_token is not defined
 
 - debug:
-    msg: "{{ kube_master_ip }}-{{ kube_master_port }}-{{ kube_token }}-{{ansible_default_ipv4.address}}"
+    msg: "{{ kube_master_ip }}-{{ kube_master_port }}-{{ kube_token }}"
 
 #- name: join node
 #  command: '{{ hostvars[groups["master"][0]]["kube_command_node_join"] }}'
@@ -28,9 +28,9 @@
 
 - block:
   - name: Pull google container docker images
-    shell:  docker pull "mirrorgooglecontainers/{{ item }}" && \
-            docker tag docker.io/mirrorgooglecontainers/{{item}} gcr.io/google_containers/{{item}} && \
-            docker rmi docker.io/mirrorgooglecontainers/{{item}}
+    shell: docker pull "mirrorgooglecontainers/{{ item }}" && \
+           docker tag "docker.io/mirrorgooglecontainers/{{item}}" "gcr.io/google_containers/{{item}}" && \
+           docker rmi "docker.io/mirrorgooglecontainers/{{item}}"
     with_items: "{{ kube_node_images }}"
   - name: Pull quay.io docker images
     shell: docker pull "docker.io/rfan/flannel:{{image_flannel_tag}}" && \

@@ -31,10 +31,11 @@
     shell:  docker pull "mirrorgooglecontainers/{{ item }}" && \
             docker tag docker.io/mirrorgooglecontainers/{{item}} gcr.io/google_containers/{{item}} && \
             docker rmi docker.io/mirrorgooglecontainers/{{item}}
-     with_items: "{{ kube_node_images }}"
+    with_items: "{{ kube_node_images }}"
   - name: Pull quay.io docker images
-    shell:  docker pull "quay.io/coreos/flannel:{{image_flannel_tag}}"
+    shell: docker pull "docker.io/rfan/flannel:{{image_flannel_tag}}" && \
+           docker tag "docker.io/rfan/flannel:{{image_flannel_tag}}" "quay.io/coreos/flannel:{{image_flannel_tag}}" && \
+           docker rmi "docker.io/rfan/flannel:{{image_flannel_tag}}"
   - name: try join worker node
     shell: kubeadm join --token {{ kube_token }} {{ kube_master_ip }}:{{ kube_master_port }}
-
   when: ansible_default_ipv4.address != kube_master_ip

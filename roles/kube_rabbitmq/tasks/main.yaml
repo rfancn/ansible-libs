@@ -10,8 +10,8 @@
 
 - name: Generate deployment files
   template: src={{ item }}.j2 dest=/tmp/{{ item }}.yaml
-  with_items: {{ DEPLOYMENT_ITEMS }}
+  with_items: "{{ DEPLOYMENT_ITEMS }}"
 
 - name: Deploy kube deployment items
   shell: kubectl create -f /tmp/{{ item }}.yaml
-  with_items: {{ DEPLOYMENT_ITEMS }}
+  with_items: "{{ DEPLOYMENT_ITEMS }}"

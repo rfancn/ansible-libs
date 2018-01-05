@@ -1,0 +1,13 @@
+serviceaccount: rabbitmq
+
+RESOURCES:
+  - statefulset
+  - service
+  - role
+  - rolebinding
+  - serviceaccount
+
+DEPLOYMENT_ITEMS:
+  - rabbitmq-rbac
+  - rabbitmq-service
+  - rabbitmq-statefulset

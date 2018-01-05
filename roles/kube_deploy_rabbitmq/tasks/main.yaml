@@ -1,0 +1,17 @@
+- name: Rabbitmq variables sanity check
+  fail: msg="Required variables->namespace missed"
+  when: namespace is not defined
+
+- name: Make sure namespace created
+  shell: kubectl get namespace "{{ namespace }}" || kubectl create namespace "{{ namespace }}"
+
+- name: Make sure rabbitmq serviceaccount created
+  shell: kubectl get serviceaccount "{{ serviceaccount }}" || kubectl create serviceaccount "{{ serviceaccount }}"
+
+- name: Generate deployment files
+  template: src={{ item }}.j2 dest=/tmp/{{ item }}.yaml
+  with_items: {{ DEPLOYMENT_ITEMS }}
+
+- name: Deploy kube deployment items
+  shell: kubectl create -f /tmp/{{ item }}.yaml
+  with_items: {{ DEPLOYMENT_ITEMS }}

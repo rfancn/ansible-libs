@@ -6,7 +6,7 @@ metadata:
   namespace: {{ namespace }}
 spec:
   serviceName: rabbitmq
-  replicas: 3
+  replicas: {{ replicas }}
   template:
     metadata:
       labels:

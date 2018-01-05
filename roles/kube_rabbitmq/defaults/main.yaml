@@ -1,4 +1,5 @@
 serviceaccount: rabbitmq
+replicas: 3
 
 RESOURCES:
   - statefulset

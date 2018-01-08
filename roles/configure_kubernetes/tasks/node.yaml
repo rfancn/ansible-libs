@@ -17,9 +17,6 @@
 - debug:
     msg: "{{ kube_master_ip }}-{{ kube_master_port }}-{{ kube_token }}"
 
-- name: reset kubernetes
-  include: "reset.yaml"
-
 #- name: join node
 #  command: '{{ hostvars[groups["master"][0]]["kube_command_node_join"] }}'
 #  when: hostvars[groups["master"][0]]["kube_command_node_join"] != ""
@@ -30,6 +27,8 @@
   when: ansible_default_ipv4.address == kube_master_ip
 
 - block:
+  - name: Reset kubernetes for worker nodes
+    include: "reset.yaml"
   - name: Pull google container docker images
     shell: docker pull "mirrorgooglecontainers/{{ item }}" && \
            docker tag "docker.io/mirrorgooglecontainers/{{item}}" "gcr.io/google_containers/{{item}}" && \

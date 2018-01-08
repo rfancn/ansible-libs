@@ -9,8 +9,6 @@
 - block:
   - name: Remove cni stuff
     shell: rm -rf /var/lib/cni && rm -rf /etc/cni
-  - name: Remove flannel stuff
-    shell: rm -rf /run/flannel
   - name: Remove bridget cni0
     shell: ifconfig cni0 down && brctl delbr cni0
 

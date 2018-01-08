@@ -19,3 +19,5 @@ kube_packages:
   - kubelet
   - kubectl
   - kubeadm
+  - net-tools
+  - bridge-utils

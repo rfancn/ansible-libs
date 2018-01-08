@@ -17,6 +17,9 @@
 - debug:
     msg: "{{ kube_master_ip }}-{{ kube_master_port }}-{{ kube_token }}"
 
+- name: reset kubernetes
+  include: "reset.yaml"
+
 #- name: join node
 #  command: '{{ hostvars[groups["master"][0]]["kube_command_node_join"] }}'
 #  when: hostvars[groups["master"][0]]["kube_command_node_join"] != ""

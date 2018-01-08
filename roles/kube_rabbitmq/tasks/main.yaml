@@ -4,9 +4,19 @@
 
 - name: Make sure namespace created
   shell: kubectl get namespace "{{ namespace }}" || kubectl create namespace "{{ namespace }}"
+  register: result_namespace_created
+  until: result_namespace_created.rc == 0
+  retries: 30
+  delay: 10
+  ignore_errors: yes
 
 - name: Make sure rabbitmq serviceaccount created
   shell: kubectl get serviceaccount "{{ serviceaccount }}" || kubectl create serviceaccount "{{ serviceaccount }}"
+  register: result_serviceaccount_created
+  until: result_serviceaccount_created.rc == 0
+  retries: 30
+  delay: 10
+  ignore_errors: yes
 
 - name: Generate deployment files
   template: src={{ item }}.j2 dest=/tmp/{{ item }}.yaml

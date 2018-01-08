@@ -18,9 +18,19 @@
   delay: 10
   ignore_errors: yes
 
+- name: Remove previous RabbitMQ stuff
+  shell: kubectl -n {{ namespace }} delete all -l app=rabbitmq
+  register: result_rabbitmq_deleted
+  until: result_rabbitmq_deleted.rc == 0
+  retries: 30
+  delay: 10
+  ignore_errors: yes
+
 - name: Generate deployment files
   template: src={{ item }}.j2 dest=/tmp/{{ item }}.yaml
   with_items: "{{ DEPLOYMENT_ITEMS }}"
+
+- name:
 
 - name: Deploy kube deployment items
   shell: kubectl create -f /tmp/{{ item }}.yaml

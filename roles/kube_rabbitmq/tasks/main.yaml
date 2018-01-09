@@ -2,7 +2,7 @@
   fail: msg="Required variables->namespace missed"
   when: namespace is not defined
 
-- include_vars "{{ version }}.yaml"
+- include_vars: "{{ version }}.yaml"
 
 - name: Make sure namespace created
   shell: kubectl get namespace "{{ namespace }}" || kubectl create namespace "{{ namespace }}"

@@ -1,0 +1,4 @@
+DEPLOYMENT_ITEMS:
+  - rabbitmq-rbac
+  - rabbitmq-service
+  - rabbitmq-statefulset

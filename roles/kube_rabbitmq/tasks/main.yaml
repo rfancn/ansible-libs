@@ -2,6 +2,8 @@
   fail: msg="Required variables->namespace missed"
   when: namespace is not defined
 
+- include_vars "{{ version }}.yaml"
+
 - name: Make sure namespace created
   shell: kubectl get namespace "{{ namespace }}" || kubectl create namespace "{{ namespace }}"
   register: result_namespace_created
@@ -27,7 +29,7 @@
   ignore_errors: yes
 
 - name: Generate deployment files
-  template: src={{ item }}.j2 dest=/tmp/{{ item }}.yaml
+  template: src="{{ version }}/{{ item }}.j2" dest=/tmp/{{ item }}.yaml
   with_items: "{{ DEPLOYMENT_ITEMS }}"
 
 - name: Deploy kube deployment items

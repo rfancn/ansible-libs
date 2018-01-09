@@ -1,3 +1,4 @@
+version: 3.7
 serviceaccount: rabbitmq
 replicas: 3
 
@@ -7,8 +8,3 @@ RESOURCES:
   - role
   - rolebinding
   - serviceaccount
-
-DEPLOYMENT_ITEMS:
-  - rabbitmq-rbac
-  - rabbitmq-service
-  - rabbitmq-statefulset

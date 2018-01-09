@@ -1,0 +1,35 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: {{ namespace }}
+  name: rabbitmq-management
+  labels:
+    app: rabbitmq
+spec:
+  type: NodePort
+  ports:
+  - name: management
+    protocol: TCP
+    port: 15672
+    targetPort: 15672
+    # nodePort only limites to: 30000-32767
+    nodePort: 31672
+  selector:
+    app: rabbitmq
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: {{ namespace }}
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  ports:
+  - name: amqp
+    protocol: TCP
+    port: 5672
+    targetPort: 5672
+  selector:
+    app: rabbitmq

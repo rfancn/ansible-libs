@@ -11,6 +11,7 @@
     shell: rm -rf /var/lib/cni && rm -rf /etc/cni
   - name: Remove bridget cni0
     shell: ifconfig cni0 down && brctl delbr cni0
+  ignore_errors: yes  
 
 - name: restart kubelet service to reload new cert if nessary
   service: name=kubelet state=restarted
